@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap');
+
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #FAF4E8; font-family: 'Zen Kaku Gothic New', sans-serif; color: #3C3630; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+
+@keyframes akiBounce {
+  0%, 100% { transform: translateY(-64px) scale(1, 1); }
+  45% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(2px) scale(1.15, 0.8); }
+  55% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes akiLeaf {
+  0%, 44% { opacity: 0; transform: translate(0, 0) rotate(0deg) scale(0.4); }
+  52% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1); }
+}
+@keyframes akiShadow {
+  0%, 100% { transform: scaleX(0.55); opacity: 0.25; }
+  50% { transform: scaleX(1); opacity: 0.5; }
+}
+@keyframes akiFadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes akiDrift {
+  0% { transform: translateY(-8%) rotate(calc(var(--base-rot, 0deg) - 6deg)); }
+  50% { transform: translateY(4%) rotate(calc(var(--base-rot, 0deg) + 6deg)); }
+  100% { transform: translateY(-8%) rotate(calc(var(--base-rot, 0deg) - 6deg)); }
+}
+@keyframes akiFall {
+  0%   { transform: translateY(0)    translateX(0)                    rotate(var(--start-rot)); opacity: 0; }
+  5%   { opacity: var(--leaf-op, 0.5); }
+  25%  { transform: translateY(22vh) translateX(var(--sway))          rotate(calc(var(--start-rot) + 55deg)); opacity: var(--leaf-op, 0.5); }
+  50%  { transform: translateY(48vh) translateX(calc(var(--sway) * -0.7)) rotate(calc(var(--start-rot) + 125deg)); }
+  75%  { transform: translateY(73vh) translateX(var(--sway))          rotate(calc(var(--start-rot) + 205deg)); opacity: var(--leaf-op, 0.5); }
+  93%  { opacity: 0; }
+  100% { transform: translateY(105vh) translateX(0)                   rotate(calc(var(--start-rot) + 265deg)); opacity: 0; }
+}
+@keyframes akiKen { from { transform: scale(1.12); } to { transform: scale(1); } }
+
+/* Nav hover */
+nav a.nav-link:hover { color: #E0604A !important; }
+a.btn-primary:hover { background: #C94E39 !important; transform: translateY(-2px); }
+a.btn-outline:hover { border-color: #E0604A !important; background: #FFF6F0 !important; }
+a.btn-instagram:hover { background: #C94E39 !important; }
+a.ig-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(60, 54, 48, 0.1) !important; }
+a.footer-ig:hover { background: #E0604A !important; }
+
+/* FAQ accordion */
+.faq-item > .faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.faq-item.is-open > .faq-body { grid-template-rows: 1fr; }
+.faq-item > .faq-body > .faq-inner { overflow: hidden; }
+.faq-item.is-open .faq-icon { transform: rotate(180deg); }
+.faq-summary:focus,
+.faq-summary:focus-visible { outline: none; }
+
+/* Mobile menu hidden by default */
+#mobile-menu { display: none; }
+#mobile-menu.open { display: flex; }
+
+/* Hero slides */
+.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s ease; }
+.hero-slide.active { opacity: 1; }

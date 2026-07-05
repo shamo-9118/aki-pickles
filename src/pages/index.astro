@@ -1,0 +1,475 @@
+---
+import '../styles/global.css';
+
+const instagramUrl = "https://www.instagram.com/";
+
+const navItems = [
+  { label: "お知らせ", href: "#news" },
+  { label: "活動について", href: "#about" },
+  { label: "活動予定", href: "#schedule" },
+  { label: "活動場所", href: "#place" },
+  { label: "お問い合わせ", href: "#contact" },
+];
+
+const news = [
+  {
+    date: "2026.07.05", tag: "体験会", highlight: true,
+    title: "第1回 ピックルボール体験会を開催します！",
+    body: "初心者大歓迎！パドル・ボールは全てクラブで用意します。動きやすい服装と体育館シューズ、飲み物をお持ちください。",
+    details: [
+      { label: "日時", value: "2026年7月26日（日）9:00〜12:00（仮）" },
+      { label: "場所", value: "府中町内体育館（調整中）" },
+      { label: "持ち物", value: "体育館シューズ・飲み物・タオル" },
+      { label: "参加費", value: "無料（初回）" },
+      { label: "申込方法", value: "Instagram DM にて「体験会参加希望」とご連絡ください" },
+    ],
+  },
+  {
+    date: "2026.07.01", tag: "お知らせ", highlight: false,
+    title: "AKI PICKLES 公式サイトを公開しました",
+    body: "広島県安芸郡府中町を拠点とするピックルボールクラブ「AKI PICKLES」の公式サイトがオープンしました。活動情報は随時更新していきます。",
+    details: [],
+  },
+  {
+    date: "2026.06.20", tag: "活動", highlight: false,
+    title: "クラブ発足のごあいさつ",
+    body: "「安芸」と「秋」を掛けた名前のとおり、地域に根ざしながらじっくり育っていくクラブを目指します。どうぞよろしくお願いします。",
+    details: [],
+  },
+];
+
+const scheduleDays = [
+  { label: "月", color: "#3C3630" },
+  { label: "火", color: "#3C3630" },
+  { label: "水", color: "#3C3630" },
+  { label: "木", color: "#3C3630" },
+  { label: "金", color: "#3C3630" },
+  { label: "土", color: "#4A7BC2" },
+  { label: "日", color: "#E0604A" },
+];
+
+const scheduleRows = [
+  { time: "9:00 – 12:00", marks: ["-", "○", "-", "-", "○", "-", "○"] },
+  { time: "17:00 – 20:00", marks: ["○", "-", "-", "○", "-", "○", "-"] },
+];
+
+const scheduleNote = "※ 曜日・時間帯は調整中の仮スケジュールです。確定次第更新します。";
+
+const placeName = "調整中（府中町内の体育館を予定）";
+const placeAddress = "広島県安芸郡府中町";
+const placeAccess = "アクセス情報は活動場所の確定後に掲載します。";
+
+const igPosts = [
+  { caption: "初回練習会を開催しました！初心者から経験者まで、みんなで楽しく汗を流しました🍁", permalink: instagramUrl },
+  { caption: "ラリー練習の様子。少しずつつながるようになってきました！", permalink: instagramUrl },
+  { caption: "体験会の準備中。パドルとボール、揃ってます。お気軽にどうぞ！", permalink: instagramUrl },
+];
+
+const faqs = [
+  { q: "初心者でも参加できますか？", a: "もちろんです！AKI PICKLES は初心者大歓迎のクラブです。ルール説明から基礎練習まで丁寧にサポートしますので、初めての方も安心してご参加ください。" },
+  { q: "道具は必要ですか？", a: "体験会ではパドル・ボールをクラブで用意します。体育館シューズと動きやすい服装、飲み物だけお持ちください。" },
+  { q: "年齢制限はありますか？", a: "特にありません。ピックルボールは幅広い年代で一緒に楽しめるスポーツです。" },
+  { q: "見学だけでも大丈夫ですか？", a: "大歓迎です。Instagram DM から「見学希望」とご連絡ください。" },
+];
+
+const heroSlides = [
+  { src: "/fv/fv1.webp" },
+  { src: "/fv/fv2.webp" },
+  { src: "/fv/fv3.webp" },
+];
+
+const heroLeaves = [
+  { left: "70%", size: 36, opacity: 0.55, dur: "6s",   delay: "0s",   startRot: "15deg",  sway: "30px"  },
+  { left: "85%", size: 22, opacity: 0.45, dur: "8.5s", delay: "2.2s", startRot: "-40deg", sway: "-24px" },
+  { left: "60%", size: 30, opacity: 0.4,  dur: "7.5s", delay: "4s",   startRot: "70deg",  sway: "28px"  },
+  { left: "92%", size: 18, opacity: 0.5,  dur: "9s",   delay: "1s",   startRot: "-55deg", sway: "-20px" },
+  { left: "55%", size: 16, opacity: 0.35, dur: "11s",  delay: "3s",   startRot: "125deg", sway: "22px"  },
+];
+
+const loaderLeaves = [
+  { tx: "-46px", ty: "-58px", rot: "-160deg", size: 15, color: "#E0604A", delay: "0s" },
+  { tx: "38px", ty: "-66px", rot: "140deg", size: 13, color: "#C94E39", delay: "0.02s" },
+  { tx: "-20px", ty: "-80px", rot: "-90deg", size: 12, color: "#E8845C", delay: "0.05s" },
+  { tx: "54px", ty: "-40px", rot: "200deg", size: 11, color: "#E0604A", delay: "0.03s" },
+  { tx: "10px", ty: "-92px", rot: "120deg", size: 14, color: "#D9704E", delay: "0.06s" },
+];
+
+const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.2 L14.8 14.5 L15.3 19 L12 15.9 L8.7 19 L9.2 14.5 L5.2 15.2 L7.6 11.6 L4 9.2 L8.6 8.2 L7 4.6 L10.7 6.2 Z";
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AKI PICKLES｜ピックルボールクラブ あきぴっくるず｜広島県安芸郡府中町</title>
+  <meta name="description" content="広島県安芸郡府中町を拠点に活動するピックルボールクラブ「AKI PICKLES（あきぴっくるず）」の公式サイトです。初心者大歓迎！体験会開催中。">
+</head>
+<body>
+
+<!-- ローディング -->
+<div id="loader" style="position: fixed; inset: 0; z-index: 200; background: #FAF4E8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; transition: opacity 0.6s ease;">
+  <div style="position: relative; width: 140px; height: 130px;">
+    {loaderLeaves.map(leaf => (
+      <img src="/momiji.webp" alt="" width={leaf.size} height={leaf.size}
+        style={`position: absolute; left: 62px; bottom: 6px; animation: akiLeaf 1.1s cubic-bezier(0.2, 0.6, 0.4, 1) infinite; animation-delay: ${leaf.delay}; --tx: ${leaf.tx}; --ty: ${leaf.ty}; --rot: ${leaf.rot};`} />
+    ))}
+    <div style="position: absolute; left: 50%; bottom: 14px; margin-left: -19px; width: 38px; height: 38px; animation: akiBounce 1.1s cubic-bezier(0.35, 0, 0.65, 1) infinite; transform-origin: center bottom;">
+      <svg viewBox="0 0 38 38" width="38" height="38">
+        <circle cx="19" cy="19" r="17" fill="#F5C531" stroke="#D9A81E" stroke-width="1.5"></circle>
+        <circle cx="13" cy="13" r="2" fill="#D9A81E"></circle>
+        <circle cx="25" cy="12" r="2" fill="#D9A81E"></circle>
+        <circle cx="19" cy="21" r="2" fill="#D9A81E"></circle>
+        <circle cx="11" cy="23" r="2" fill="#D9A81E"></circle>
+        <circle cx="27" cy="23" r="2" fill="#D9A81E"></circle>
+      </svg>
+    </div>
+    <div style="position: absolute; left: 50%; bottom: 8px; margin-left: -22px; width: 44px; height: 8px; border-radius: 50%; background: #D8C7A8; animation: akiShadow 1.1s cubic-bezier(0.35, 0, 0.65, 1) infinite;"></div>
+  </div>
+  <div style="font-family: Jost, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.35em; color: #E0604A;">AKI PICKLES</div>
+</div>
+
+<!-- ヘッダー -->
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250, 244, 232, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(224, 96, 74, 0.14);">
+  <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="/logo.webp" alt="AKI PICKLES" style="height: 42px; width: auto; display: block; mix-blend-mode: multiply;">
+      <span style="font-size: 11px; font-weight: 500; color: #A08F78; letter-spacing: 0.1em;">あきぴっくるず</span>
+    </a>
+    <!-- デスクトップナビ -->
+    <nav id="desktop-nav" style="display: flex; align-items: center; gap: 26px;">
+      {navItems.map(nv => (
+        <a href={nv.href} class="nav-link" style="font-size: 13.5px; font-weight: 500; color: #3C3630; text-decoration: none; letter-spacing: 0.04em;">{nv.label}</a>
+      ))}
+      <a href="#news" class="btn-instagram" style="font-size: 13px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 9px 18px; border-radius: 999px; letter-spacing: 0.04em;">体験会に参加する</a>
+    </nav>
+    <!-- ハンバーガーボタン（モバイル） -->
+    <button id="menu-btn" aria-label="メニュー" style="display: none; width: 44px; height: 44px; border: none; background: none; cursor: pointer; align-items: center; justify-content: center; color: #3C3630;">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path id="menu-icon" d="M4 7h16 M4 12h16 M4 17h16"></path>
+      </svg>
+    </button>
+  </div>
+  <!-- モバイルメニュー -->
+  <nav id="mobile-menu" style="flex-direction: column; background: #FFFDF8; border-bottom: 1px solid rgba(224, 96, 74, 0.14); padding: 8px 0 16px;">
+    {navItems.map(nv => (
+      <a href={nv.href} class="mobile-nav-link" style="padding: 14px 24px; font-size: 15px; font-weight: 500; color: #3C3630; text-decoration: none; border-bottom: 1px solid rgba(160, 143, 120, 0.12);">{nv.label}</a>
+    ))}
+    <div style="padding: 16px 24px 4px;">
+      <a href="#news" class="mobile-nav-link" style="display: block; text-align: center; font-size: 14px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 13px 18px; border-radius: 999px;">体験会に参加する</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ファーストビュー -->
+<section id="top" style="position: relative; min-height: 92vh; display: flex; align-items: center; overflow: hidden; padding: 110px 20px 70px;">
+  {heroSlides.map((slide, i) => (
+    <div class={`hero-slide${i === 0 ? ' active' : ''}`}>
+      <img src={slide.src} alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; animation: akiKen 9s ease-out both;" />
+    </div>
+  ))}
+  <div style="position: absolute; inset: 0; background: linear-gradient(100deg, rgba(250, 244, 232, 0.96) 0%, rgba(250, 244, 232, 0.82) 46%, rgba(250, 244, 232, 0.3) 100%);"></div>
+  <!-- 紅葉あしらい -->
+  {heroLeaves.map(hl => (
+    <img src="/momiji.webp" alt="" width={hl.size} height={hl.size}
+      style={`position: absolute; left: ${hl.left}; top: -80px; animation: akiFall ${hl.dur} ease-in-out infinite; animation-delay: ${hl.delay}; --start-rot: ${hl.startRot}; --sway: ${hl.sway}; --leaf-op: ${hl.opacity};`} />
+  ))}
+  <div style="position: relative; max-width: 1080px; margin: 0 auto; width: 100%; animation: akiFadeUp 0.9s ease 0.15s both;">
+    <div style="max-width: 560px; display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="height: 2px; width: 36px; background: #E0604A;"></span>
+        <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.3em; color: #E0604A;">PICKLEBALL CLUB — AKI, HIROSHIMA</span>
+      </div>
+      <h1 style="margin: 0; font-size: clamp(30px, 6vw, 46px); font-weight: 900; line-height: 1.45; letter-spacing: 0.02em; color: #33291F;">
+        安芸の秋空の下、<br>はじめての一打を、<br>仲間と。
+      </h1>
+      <p style="margin: 0; font-size: 15px; line-height: 2; color: #6B5F4E; font-weight: 500;">
+        AKI PICKLES（あきぴっくるず）は、広島県安芸郡府中町を拠点に活動するピックルボールクラブです。初めての方も、うまくなりたい方も。楽しさと成長、どちらも大切にしています。
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px;">
+        <a href="#news" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;">
+          体験会に参加する
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="#about" class="btn-outline" style="display: inline-flex; align-items: center; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">クラブについて</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- お知らせ -->
+<section id="news" style="padding: 84px 20px; background: #FFFDF8;">
+  <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">NEWS</span>
+      <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">お知らせ</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      {news.map(item => (
+        <article style={`background: ${item.highlight ? '#FFF6F0' : '#FFFFFF'}; border: ${item.highlight ? '1.5px solid rgba(224, 96, 74, 0.45)' : '1px solid rgba(160, 143, 120, 0.16)'}; border-radius: 14px; padding: 26px 26px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: ${item.highlight ? '0 8px 24px rgba(224, 96, 74, 0.12)' : 'none'};`}>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <time style="font-family: Jost, sans-serif; font-size: 13px; font-weight: 500; color: #A08F78; letter-spacing: 0.06em;">{item.date}</time>
+            <span style={`font-size: 11px; font-weight: 700; color: ${item.highlight ? '#FFFFFF' : '#A08F78'}; background: ${item.highlight ? '#E0604A' : '#F3EBDC'}; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.08em;`}>{item.tag}</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.6; color: #33291F;">{item.title}</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{item.body}</p>
+          {item.details.length > 0 && (
+            <>
+              <dl style="margin: 6px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; background: transparent; border-radius: 10px; padding: 18px 20px;">
+                {item.details.map(d => (
+                  <>
+                    <dt style="font-size: 12.5px; font-weight: 700; color: #E0604A; padding-top: 1px; white-space: nowrap;">{d.label}</dt>
+                    <dd style="margin: 0; font-size: 13.5px; line-height: 1.7; color: #3C3630;">{d.value}</dd>
+                  </>
+                ))}
+              </dl>
+              <a href={instagramUrl} target="_blank" rel="noopener" class="btn-instagram" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 11px 20px; border-radius: 999px; transition: background 0.2s;">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+                Instagram DM で申し込む
+              </a>
+            </>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- 活動について -->
+<section id="about" style="padding: 84px 20px; background: #FAF4E8; position: relative; overflow: hidden;">
+  <img src="/momiji.webp" alt="" width="180" height="180" style="position: absolute; right: -50px; top: 30px; opacity: 0.06; transform: rotate(18deg);" />
+  <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; position: relative;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">ABOUT</span>
+      <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動について</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">コミュニティ</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">「PICKLES」は仲間が集う場所の意味。年齢や経験を問わず、誰もが気持ちよく参加できる雰囲気づくりを一番大切にしています。</p>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7l-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg>
+        </div>
+        <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">成長</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">楽しむだけで終わらない、少し競技志向のエッセンスも。基礎練習やゲーム形式を通じて、一人ひとりの「うまくなりたい」を応援します。</p>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">地域密着</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">拠点は広島県安芸郡府中町。地域の体育館を中心に活動し、町の新しいスポーツコミュニティとして根を張っていきます。</p>
+      </div>
+    </div>
+    <!-- Instagramの様子 -->
+    <div style="display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <h3 style="margin: 0; font-size: 19px; font-weight: 700; color: #33291F; display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+          活動の様子
+        </h3>
+        <span style="font-size: 12px; color: #A08F78;">Instagram 最新投稿より</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+        {igPosts.map(post => (
+          <a href={post.permalink} target="_blank" rel="noopener" class="ig-card" style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 14px; overflow: hidden; text-decoration: none; border: 1px solid rgba(160, 143, 120, 0.16); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+            <div style="aspect-ratio: 1 / 1; background: repeating-linear-gradient(45deg, #F0E7D5 0px, #F0E7D5 14px, #EAE0CA 14px, #EAE0CA 28px); position: relative;">
+              <span style="position: absolute; left: 12px; bottom: 12px; font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: #8A7A62; background: rgba(255, 253, 248, 0.9); padding: 4px 8px; border-radius: 4px;">投稿画像（差し替え予定）</span>
+            </div>
+            <p style="margin: 0; padding: 15px 17px 17px; font-size: 13px; line-height: 1.8; color: #6B5F4E;">{post.caption}</p>
+          </a>
+        ))}
+      </div>
+      <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline" style="align-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 13px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">
+        Instagramでもっと見る
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7 M9 7h8v8"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 活動予定 -->
+<section id="schedule" style="padding: 84px 20px; background: #FFFDF8;">
+  <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">SCHEDULE</span>
+      <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動予定</h2>
+    </div>
+    <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(160, 143, 120, 0.2); background: #FFFFFF;">
+      <div style="min-width: 560px;">
+        <div style="display: grid; grid-template-columns: 140px repeat(7, 1fr); background: #FFF9EF; border-bottom: 2px solid rgba(224, 96, 74, 0.25);">
+          <div style="padding: 15px 18px; font-size: 13px; font-weight: 700; color: #A08F78;">時間帯</div>
+          {scheduleDays.map(day => (
+            <div style={`padding: 15px 8px; font-size: 14px; font-weight: 700; color: ${day.color}; text-align: center;`}>{day.label}</div>
+          ))}
+        </div>
+        {scheduleRows.map(row => (
+          <div style="display: grid; grid-template-columns: 140px repeat(7, 1fr); border-bottom: 1px solid rgba(160, 143, 120, 0.14);">
+            <div style="padding: 17px 18px; font-family: Jost, sans-serif; font-size: 14px; font-weight: 600; color: #3C3630; white-space: nowrap; display: flex; align-items: center;">{row.time}</div>
+            {row.marks.map((mark, i) => {
+              const isActive = mark === "○";
+              return (
+                <div style={`padding: 17px 8px; display: flex; align-items: center; justify-content: center; font-size: ${isActive ? '18px' : '14px'}; font-weight: 700; color: ${isActive ? '#E0604A' : '#C9BCA4'}; background: ${isActive ? 'rgba(224, 96, 74, 0.07)' : 'transparent'};`}>{isActive ? '○' : '–'}</div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 12.5px; color: #A08F78; line-height: 1.8;">{scheduleNote}</p>
+  </div>
+</section>
+
+<!-- 活動場所 -->
+<section id="place" style="padding: 84px 20px; background: #FAF4E8;">
+  <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">PLACE</span>
+      <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動場所</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: stretch;">
+      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 16px; border: 1px solid rgba(160, 143, 120, 0.16);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">{placeName}</h3>
+        </div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{placeAddress}</p>
+        <p style="margin: 0; font-size: 13px; line-height: 1.9; color: #A08F78;">{placeAccess}</p>
+        <span style="align-self: flex-start; font-size: 11px; font-weight: 700; color: #A08F78; background: #F3EBDC; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.06em;">確定次第、更新します</span>
+      </div>
+      <div style="border-radius: 14px; min-height: 220px; background: repeating-linear-gradient(45deg, #F0E7D5 0px, #F0E7D5 14px, #EAE0CA 14px, #EAE0CA 28px); border: 1px solid rgba(160, 143, 120, 0.2); display: flex; align-items: center; justify-content: center;">
+        <span style="font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #8A7A62; background: rgba(255, 253, 248, 0.9); padding: 6px 12px; border-radius: 4px;">地図（活動場所確定後に掲載）</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- お問い合わせ -->
+<section id="contact" style="padding: 84px 20px 96px; background: #FFFDF8;">
+  <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
+    <div style="display: flex; flex-direction: column; gap: 8px; text-align: center;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">CONTACT</span>
+      <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">お問い合わせはこちら</h2>
+      <p style="margin: 10px 0 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">体験会・見学のお申し込み、ご質問は Instagram の DM にてお気軽にどうぞ。</p>
+    </div>
+    <a href={instagramUrl} target="_blank" rel="noopener" class="btn-primary" style="align-self: center; display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 17px 34px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+      お問い合わせはこちら
+    </a>
+    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 8px;">
+      <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">よくある質問</h3>
+      {faqs.map(faq => (
+        <div class="faq-item" style="background: #FAF4E8; border-radius: 12px; overflow: hidden;">
+          <button class="faq-summary" style="width: 100%; background: none; border: none; padding: 18px 22px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left;">
+            <span style="font-family: Jost, sans-serif; font-weight: 700; font-size: 14px; color: #E0604A; flex-shrink: 0;">Q.</span>
+            <span style="font-size: 14.5px; font-weight: 700; color: #33291F; line-height: 1.7; flex: 1;">{faq.q}</span>
+            <svg class="faq-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#A08F78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transition: transform 0.35s ease;"><path d="M6 9l6 6 6-6"></path></svg>
+          </button>
+          <div class="faq-body">
+            <div class="faq-inner">
+              <div style="padding: 0 22px 18px; display: flex; gap: 10px; align-items: baseline;">
+                <span style="font-family: Jost, sans-serif; font-weight: 700; font-size: 14px; color: #A08F78; flex-shrink: 0;">A.</span>
+                <span style="font-size: 13.5px; color: #6B5F4E; line-height: 1.9;">{faq.a}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer style="background: #33291F; color: #D8C7A8; padding: 44px 20px 34px;">
+  <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-family: Jost, sans-serif; font-weight: 700; font-size: 19px; letter-spacing: 0.08em; color: #FAF4E8;">AKI PICKLES</span>
+        <span style="font-size: 12px; color: #A08F78;">ピックルボールクラブ あきぴっくるず ／ 広島県安芸郡府中町</span>
+      </div>
+      <a href={instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" class="footer-ig" style="width: 44px; height: 44px; border-radius: 12px; background: rgba(250, 244, 232, 0.1); display: flex; align-items: center; justify-content: center; color: #FAF4E8; text-decoration: none; transition: background 0.2s;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+      </a>
+    </div>
+    <div style="border-top: 1px solid rgba(250, 244, 232, 0.12); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+      <span style="font-size: 11.5px; color: #A08F78;">© 2026 AKI PICKLES. All rights reserved.</span>
+      <img src="/momiji.webp" alt="" width="16" height="16" style="opacity: 0.6;" />
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ローディング
+  const loader = document.getElementById('loader');
+  if (loader) {
+    setTimeout(() => { loader.style.opacity = '0'; }, 2300);
+    setTimeout(() => { loader.style.display = 'none'; }, 2900);
+  }
+
+  // ヒーロースライドショー
+  const slides = document.querySelectorAll('.hero-slide');
+  let heroIndex = 0;
+  if (slides.length > 1) {
+    setInterval(() => {
+      slides[heroIndex].classList.remove('active');
+      heroIndex = (heroIndex + 1) % slides.length;
+      slides[heroIndex].classList.add('active');
+    }, 5000);
+  }
+
+  // モバイルメニュー
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+  const desktopNav = document.getElementById('desktop-nav');
+
+  const OPEN_PATH = "M6 6l12 12 M6 18L18 6";
+  const CLOSE_PATH = "M4 7h16 M4 12h16 M4 17h16";
+
+  function updateLayout() {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (menuBtn) menuBtn.style.display = isMobile ? 'flex' : 'none';
+    if (desktopNav) desktopNav.style.display = isMobile ? 'none' : 'flex';
+    if (!isMobile && mobileMenu) {
+      mobileMenu.classList.remove('open');
+      if (menuIcon) menuIcon.setAttribute('d', CLOSE_PATH);
+    }
+  }
+
+  updateLayout();
+  window.matchMedia('(max-width: 767px)').addEventListener('change', updateLayout);
+
+  if (menuBtn && mobileMenu && menuIcon) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      menuIcon.setAttribute('d', isOpen ? OPEN_PATH : CLOSE_PATH);
+    });
+  }
+
+  // モバイルメニューのリンクをクリックしたら閉じる
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.remove('open');
+      if (menuIcon) menuIcon.setAttribute('d', CLOSE_PATH);
+    });
+  });
+
+  // FAQ アコーディオン（排他制御・アニメーション）
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const btn = item.querySelector('.faq-summary');
+    btn?.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+      faqItems.forEach(i => i.classList.remove('is-open'));
+      if (!isOpen) item.classList.add('is-open');
+    });
+  });
+</script>
+
+</body>
+</html>
