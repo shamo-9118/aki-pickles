@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 
-const instagramUrl = "https://www.instagram.com/";
+const instagramUrl = "https://www.instagram.com/aki.pickles/";
 
 const navItems = [
   { label: "お知らせ", href: "#news" },
@@ -104,6 +104,9 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AKI PICKLES｜ピックルボールクラブ あきぴっくるず｜広島県安芸郡府中町</title>
   <meta name="description" content="広島県安芸郡府中町を拠点に活動するピックルボールクラブ「AKI PICKLES（あきぴっくるず）」の公式サイトです。初心者大歓迎！体験会開催中。">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </head>
 <body>
 
@@ -362,7 +365,10 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       お問い合わせはこちら
     </a>
     <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 8px;">
-      <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">よくある質問</h3>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">FAQ</span>
+        <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">よくある質問</h2>
+      </div>
       {faqs.map(faq => (
         <div class="faq-item" style="background: #FAF4E8; border-radius: 12px; overflow: hidden;">
           <button class="faq-summary" style="width: 100%; background: none; border: none; padding: 18px 22px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-align: left;">
