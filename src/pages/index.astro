@@ -24,12 +24,14 @@ const news = [
     title: "AKI PICKLES 公式サイトを公開しました",
     body: "広島県安芸郡府中町を拠点とするピックルボールクラブ「AKI PICKLES」の公式サイトがオープンしました。活動情報は随時更新していきます。",
     details: [],
+    detailLink: "/news-2",
   },
   {
     date: "2026.06.20", tag: "活動", highlight: false,
     title: "クラブ発足のごあいさつ",
     body: "「安芸」と「秋」を掛けた名前のとおり、地域に根ざしながらじっくり育っていくクラブを目指します。どうぞよろしくお願いします。",
     details: [],
+    detailLink: "/news-3",
   },
 ];
 
@@ -203,26 +205,32 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">お知らせ</h2>
     </div>
     <div style="display: flex; flex-direction: column; gap: 18px;">
-      {news.map(item => (
-        <article style={`background: ${item.highlight ? '#FFF6F0' : '#FFFFFF'}; border: ${item.highlight ? '1.5px solid rgba(224, 96, 74, 0.45)' : '1px solid rgba(160, 143, 120, 0.16)'}; border-radius: 14px; padding: 26px 26px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: ${item.highlight ? '0 8px 24px rgba(224, 96, 74, 0.12)' : 'none'};`}>
+      {news.map((item, i) => (
+        <article class="news-card" style={`position: relative; background: ${item.highlight ? '#FFF6F0' : '#FFFFFF'}; border: ${item.highlight ? '1.5px solid rgba(224, 96, 74, 0.45)' : '1px solid rgba(160, 143, 120, 0.16)'}; border-radius: 14px; padding: 26px 26px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: ${item.highlight ? '0 8px 24px rgba(224, 96, 74, 0.12)' : 'none'}; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;`}>
+          <a href={item.detailLink} aria-label={item.title} style="position: absolute; inset: 0; border-radius: 14px;"></a>
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <time style="font-family: Jost, sans-serif; font-size: 13px; font-weight: 500; color: #A08F78; letter-spacing: 0.06em;">{item.date}</time>
             <span style={`font-size: 11px; font-weight: 700; color: ${item.highlight ? '#FFFFFF' : '#A08F78'}; background: ${item.highlight ? '#E0604A' : '#F3EBDC'}; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.08em;`}>{item.tag}</span>
           </div>
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.6; color: #33291F;">{item.title}</h3>
-          <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{item.body}</p>
-          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px;">
-            {item.detailLink && (
-              <a href={item.detailLink} style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 11px 20px; border-radius: 999px; transition: background 0.2s;" class="btn-instagram">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.6; color: #33291F;">{item.title}</h3>
+            {!item.highlight && (
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#A08F78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 4px;"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>
+            )}
+          </div>
+          {item.highlight && <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{item.body}</p>}
+          {item.highlight && (
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; position: relative; z-index: 1;">
+              <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; background: #E0604A; padding: 11px 20px; border-radius: 999px;">
                 詳細・お申し込みはこちら
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>
+              </span>
+              <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline" style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #E0604A; background: transparent; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 10px 18px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+                Instagram DM
               </a>
-            )}
-            <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline" style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #E0604A; background: transparent; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 10px 18px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
-              Instagram DM
-            </a>
-          </div>
+            </div>
+          )}
         </article>
       ))}
     </div>
@@ -237,22 +245,22 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">ABOUT</span>
       <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動について</h2>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+    <div class="about-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div class="about-card" style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
         <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>
         <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">コミュニティ</h3>
         <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">「PICKLES」は仲間が集う場所の意味。年齢や経験を問わず、誰もが気持ちよく参加できる雰囲気づくりを一番大切にしています。</p>
       </div>
-      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+      <div class="about-card" style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
         <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7l-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg>
         </div>
         <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">成長</h3>
         <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">楽しむだけで終わらない、少し競技志向のエッセンスも。基礎練習やゲーム形式を通じて、一人ひとりの「うまくなりたい」を応援します。</p>
       </div>
-      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
+      <div class="about-card" style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.16);">
         <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBEAE4; display: flex; align-items: center; justify-content: center; color: #E0604A;">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
         </div>
@@ -269,7 +277,7 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
         </h3>
         <span style="font-size: 12px; color: #A08F78;">Instagram 最新投稿より</span>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+      <div class="ig-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
         {igPosts.map(post => (
           <a href={post.permalink} target="_blank" rel="noopener" class="ig-card" style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 14px; overflow: hidden; text-decoration: none; border: 1px solid rgba(160, 143, 120, 0.16); transition: transform 0.2s ease, box-shadow 0.2s ease;">
             <div style="aspect-ratio: 1 / 1; background: repeating-linear-gradient(45deg, #F0E7D5 0px, #F0E7D5 14px, #EAE0CA 14px, #EAE0CA 28px); position: relative;">
