@@ -116,27 +116,32 @@ const notes = [
   </div>
 </section>
 
-<!-- ルール動画 -->
+<!-- タイムスケジュール -->
 <section style="padding: 0 20px 60px;">
   <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
     <h2 style="margin: 0 0 4px; display: flex; flex-direction: column; gap: 4px;">
-      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">RULES</span>
-      <span style="font-size: 22px; font-weight: 900; color: #33291F;">ルール動画</span>
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">SCHEDULE</span>
+      <span style="font-size: 22px; font-weight: 900; color: #33291F;">タイムスケジュール</span>
     </h2>
-    <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">当日にもご説明しますので、見ていなくても大丈夫です！ただ、知っていると<strong>よりゲームを楽しめる</strong>ので、よければ事前にチェックしてみてください🏓</p>
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <span style="font-size: 13px; font-weight: 700; color: #33291F;">基本ルール</span>
-        <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #EAE0CA;">
-          <iframe src="https://www.youtube.com/embed/onX5dLkXGzU" title="ピックルボール 基本ルール" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;"></iframe>
+    <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160, 143, 120, 0.16);">
+      {[
+        { time: "10:00", label: "設営" },
+        { time: "10:15", label: "挨拶・趣旨説明" },
+        { time: "10:25", label: "ディンク 解説・練習" },
+        { time: "10:35", label: "ボレー 解説・練習" },
+        { time: "10:45", label: "サーブ＆レシーブ 解説・練習" },
+        { time: "10:55", label: "ディンクマッチ 解説・練習" },
+        { time: "11:05", label: "休憩" },
+        { time: "11:10", label: "ゲーム形式" },
+        { time: "11:45", label: "終了" },
+        { time: "12:00", label: "撤収完了" },
+      ].map((row, i, arr) => (
+        <div style={`display: flex; align-items: center; gap: 0; ${i < arr.length - 1 ? 'border-bottom: 1px solid rgba(160, 143, 120, 0.1);' : ''}`}>
+          <div style="width: 72px; flex-shrink: 0; padding: 16px 0 16px 20px; font-family: Jost, sans-serif; font-size: 14px; font-weight: 700; color: #E0604A; letter-spacing: 0.04em;">{row.time}</div>
+          <div style="width: 1px; height: 100%; background: rgba(160, 143, 120, 0.15); align-self: stretch;"></div>
+          <div style="padding: 16px 20px; font-size: 14px; font-weight: 600; color: #33291F;">{row.label}</div>
         </div>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <span style="font-size: 13px; font-weight: 700; color: #33291F;">ゲームのスコア</span>
-        <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #EAE0CA;">
-          <iframe src="https://www.youtube.com/embed/1jZkT_I-8pc" title="ピックルボール ゲームのスコア" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;"></iframe>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
@@ -174,6 +179,29 @@ const notes = [
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           shoma@marumotech.com
         </a>
+      </div>
+    </div>
+
+    <!-- ルール動画 -->
+    <div id="rules" style="display: flex; flex-direction: column; gap: 12px;">
+      <h3 style="margin: 0; display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.3em; color: #E0604A;">RULES</span>
+        <span style="font-size: 18px; font-weight: 900; color: #33291F;">ルール動画</span>
+      </h3>
+      <p style="margin: 0; font-size: 13px; line-height: 1.8; color: #6B5F4E;">当日にもご説明しますので、見ていなくても大丈夫です！知っていると<strong>よりゲームを楽しめる</strong>ので、よければ事前にチェックしてみてください🏓</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: #33291F;">基本ルール</span>
+          <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #EAE0CA;">
+            <iframe src="https://www.youtube.com/embed/onX5dLkXGzU" title="ピックルボール 基本ルール" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: #33291F;">ゲームのスコア</span>
+          <div style="position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #EAE0CA;">
+            <iframe src="https://www.youtube.com/embed/1jZkT_I-8pc" title="ピックルボール ゲームのスコア" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+        </div>
       </div>
     </div>
   </div>
