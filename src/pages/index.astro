@@ -15,14 +15,9 @@ const news = [
   {
     date: "2026.07.05", tag: "体験会", highlight: true,
     title: "第1回 ピックルボール体験会を開催します！",
-    body: "初心者大歓迎！パドル・ボールは全てクラブで用意します。動きやすい服装と体育館シューズ、飲み物をお持ちください。",
-    details: [
-      { label: "日時", value: "2026年7月26日（日）9:00〜12:00（仮）" },
-      { label: "場所", value: "府中町内体育館（調整中）" },
-      { label: "持ち物", value: "体育館シューズ・飲み物・タオル" },
-      { label: "参加費", value: "無料（初回）" },
-      { label: "申込方法", value: "Instagram DM にて「体験会参加希望」とご連絡ください" },
-    ],
+    body: "8月9日（日）開催！初心者大歓迎。パドル貸出あり。参加費500円。安芸府中生涯学習センターくすのきプラザにて。",
+    details: [],
+    detailLink: "/taiken1",
   },
   {
     date: "2026.07.01", tag: "お知らせ", highlight: false,
@@ -216,22 +211,18 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
           </div>
           <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.6; color: #33291F;">{item.title}</h3>
           <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{item.body}</p>
-          {item.details.length > 0 && (
-            <>
-              <dl style="margin: 6px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; background: transparent; border-radius: 10px; padding: 18px 20px;">
-                {item.details.map(d => (
-                  <>
-                    <dt style="font-size: 12.5px; font-weight: 700; color: #E0604A; padding-top: 1px; white-space: nowrap;">{d.label}</dt>
-                    <dd style="margin: 0; font-size: 13.5px; line-height: 1.7; color: #3C3630;">{d.value}</dd>
-                  </>
-                ))}
-              </dl>
-              <a href={instagramUrl} target="_blank" rel="noopener" class="btn-instagram" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 11px 20px; border-radius: 999px; transition: background 0.2s;">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
-                Instagram DM で申し込む
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px;">
+            {item.detailLink && (
+              <a href={item.detailLink} style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 11px 20px; border-radius: 999px; transition: background 0.2s;" class="btn-instagram">
+                詳細・お申し込みはこちら
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>
               </a>
-            </>
-          )}
+            )}
+            <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline" style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 700; color: #E0604A; background: transparent; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 10px 18px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+              Instagram DM
+            </a>
+          </div>
         </article>
       ))}
     </div>

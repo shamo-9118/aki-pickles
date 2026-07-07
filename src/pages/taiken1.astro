@@ -1,0 +1,174 @@
+---
+import '../styles/global.css';
+
+const instagramUrl = "https://www.instagram.com/aki.pickles/";
+const formUrl = "https://forms.gle/vqgDeHjSxUw93nic7";
+const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.2 L14.8 14.5 L15.3 19 L12 15.9 L8.7 19 L9.2 14.5 L5.2 15.2 L7.6 11.6 L4 9.2 L8.6 8.2 L7 4.6 L10.7 6.2 Z";
+
+const overview = [
+  { icon: "📅", label: "開催日", value: "8月9日（日）10:00 〜 12:00" },
+  { icon: "📍", label: "開催場所", value: "安芸府中生涯学習センター\nくすのきプラザ 2F 大アリーナ" },
+  { icon: "🗺️", label: "住所", value: "〒735-0006\n広島県安芸郡府中町本町1丁目10-15" },
+];
+
+const notes = [
+  { icon: "👟", text: "体育館で行いますので、体育館シューズをご持参ください" },
+  { icon: "🏓", text: "パドルは先着4名様のみ貸出可能です（貸出料：200円）" },
+  { icon: "💰", text: "参加費は500円です（現金またはPayPayにてお支払いください）" },
+  { icon: "👥", text: "全体の定員は12名ほどを予定しております" },
+  { icon: "📞", text: "キャンセルされる場合は前日までにインスタDMまたは以下の連絡先へご連絡ください" },
+  { icon: "⚠️", text: "体験会中の怪我については自己責任（またはスポーツ保険の範囲内）となりますのでご了承ください" },
+];
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第1回 ピックルボール体験会｜AKI PICKLES</title>
+  <meta name="description" content="AKI PICKLES 第1回ピックルボール体験会。2026年8月9日（日）開催。初心者大歓迎！安芸府中生涯学習センターくすのきプラザにて。">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body style="background: #FAF4E8;">
+
+<!-- ヘッダー -->
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250, 244, 232, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(224, 96, 74, 0.14);">
+  <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="/logo.webp" alt="AKI PICKLES" style="height: 42px; width: auto; display: block; mix-blend-mode: multiply;">
+      <span style="font-size: 11px; font-weight: 500; color: #A08F78; letter-spacing: 0.1em;">あきぴっくるず</span>
+    </a>
+    <a href="/" style="font-size: 13px; font-weight: 600; color: #E0604A; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5 M11 6l-6 6 6 6"></path></svg>
+      トップへ戻る
+    </a>
+  </div>
+</header>
+
+<!-- ヒーロー -->
+<section style="padding: 120px 20px 60px; position: relative; overflow: hidden; text-align: center;">
+  <!-- 背景の紅葉装飾 -->
+  <img src="/momiji.webp" alt="" width="200" height="200" style="position: absolute; right: -40px; top: 40px; opacity: 0.06; transform: rotate(20deg);" />
+  <img src="/momiji.webp" alt="" width="120" height="120" style="position: absolute; left: -20px; bottom: 60px; opacity: 0.05; transform: rotate(-30deg);" />
+
+  <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; position: relative;">
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: #E0604A; color: #fff; font-family: Jost, sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.2em; padding: 6px 16px; border-radius: 999px;">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="{leafPath}"></path></svg>
+      EVENT
+    </div>
+    <h1 style="margin: 0; font-size: clamp(26px, 6vw, 42px); font-weight: 900; color: #33291F; line-height: 1.4; letter-spacing: 0.02em;">
+      第1回<br>ピックルボール体験会
+    </h1>
+    <p style="margin: 0; font-size: 16px; font-weight: 700; color: #E0604A; font-family: Jost, sans-serif; letter-spacing: 0.1em;">
+      2026.08.09 SUN 10:00–12:00
+    </p>
+    <p style="margin: 0; font-size: 15px; line-height: 2; color: #6B5F4E; font-weight: 500; max-width: 480px;">
+      こんにちは！AKI PICKLES（あきぴっくるず）です。<br>ピックルボールを一緒に楽しみませんか？<br>初心者の方も大歓迎です！
+    </p>
+
+    <!-- CTAボタン -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px;">
+      <a href={formUrl} target="_blank" rel="noopener"
+        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
+        class="btn-primary">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Googleフォームで申し込む
+      </a>
+      <a href={instagramUrl} target="_blank" rel="noopener"
+        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
+        class="btn-outline">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+        Instagram DM で申し込む
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 概要 -->
+<section style="padding: 20px 20px 60px;">
+  <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0 0 4px; display: flex; flex-direction: column; gap: 4px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">OVERVIEW</span>
+      <span style="font-size: 22px; font-weight: 900; color: #33291F;">開催概要</span>
+    </h2>
+    <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160, 143, 120, 0.16);">
+      {overview.map((item, i) => (
+        <div style={`display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; ${i < overview.length - 1 ? 'border-bottom: 1px solid rgba(160, 143, 120, 0.12);' : ''}`}>
+          <span style="font-size: 22px; flex-shrink: 0; margin-top: 2px;">{item.icon}</span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #E0604A; letter-spacing: 0.1em;">{item.label}</span>
+            <span style="font-size: 15px; font-weight: 600; color: #33291F; line-height: 1.7; white-space: pre-line;">{item.value}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- 注意事項 -->
+<section style="padding: 0 20px 60px;">
+  <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0 0 4px; display: flex; flex-direction: column; gap: 4px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">NOTES</span>
+      <span style="font-size: 22px; font-weight: 900; color: #33291F;">注意事項</span>
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      {notes.map(note => (
+        <div style="background: #FFFDF8; border-radius: 12px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.14);">
+          <span style="font-size: 20px; flex-shrink: 0;">{note.icon}</span>
+          <p style="margin: 0; font-size: 14px; line-height: 1.85; color: #4A3F34; font-weight: 500;">{note.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- キャンセル連絡先 -->
+    <div style="background: #FFF6F0; border-radius: 12px; padding: 20px 24px; border: 1.5px solid rgba(224, 96, 74, 0.2); display: flex; flex-direction: column; gap: 8px;">
+      <p style="margin: 0; font-size: 13px; font-weight: 700; color: #E0604A;">キャンセルのご連絡先</p>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <a href="tel:07024340138" style="font-size: 14px; color: #3C3630; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          070-2434-0138
+        </a>
+        <a href="mailto:shoma@marumotech.com" style="font-size: 14px; color: #3C3630; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          shoma@marumotech.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 下部CTA -->
+<section style="padding: 20px 20px 80px; background: #FFFDF8; border-top: 1px solid rgba(160, 143, 120, 0.12);">
+  <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
+    <p style="margin: 0; font-size: 15px; font-weight: 700; color: #33291F;">参加希望の方はこちらからお申し込みください！</p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
+      <a href={formUrl} target="_blank" rel="noopener"
+        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
+        class="btn-primary">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Googleフォームで申し込む
+      </a>
+      <a href={instagramUrl} target="_blank" rel="noopener"
+        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
+        class="btn-outline">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+        Instagram DM で申し込む
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer style="background: #33291F; color: #D8C7A8; padding: 28px 20px;">
+  <div style="max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+    <span style="font-size: 11.5px; color: #A08F78;">© 2026 AKI PICKLES. All rights reserved.</span>
+    <a href="/" style="font-size: 13px; font-weight: 600; color: #D8C7A8; text-decoration: none;">トップへ戻る</a>
+  </div>
+</footer>
+
+</body>
+</html>
