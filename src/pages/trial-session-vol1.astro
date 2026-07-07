@@ -12,12 +12,12 @@ const overview = [
 ];
 
 const notes = [
-  { icon: "👟", text: "体育館で行いますので、体育館シューズをご持参ください" },
-  { icon: "🏓", text: "パドルは先着4名様のみ貸出可能です（貸出料：200円）" },
-  { icon: "💰", text: "参加費は500円です（現金またはPayPayにてお支払いください）" },
-  { icon: "👥", text: "全体の定員は12名ほどを予定しております" },
-  { icon: "📞", text: "キャンセルされる場合は前日までにインスタDMまたは以下の連絡先へご連絡ください" },
-  { icon: "⚠️", text: "体験会中の怪我については自己責任（またはスポーツ保険の範囲内）となりますのでご了承ください" },
+  { label: "シューズ", text: "体育館で行いますので、体育館シューズをご持参ください", svg: `<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>` },
+  { label: "パドル", text: "パドルは先着4名様のみ貸出可能です（貸出料：200円）", svg: `<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>` },
+  { label: "参加費", text: "参加費は500円です（現金またはPayPayにてお支払いください）", svg: `<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>` },
+  { label: "定員", text: "全体の定員は12名ほどを予定しております", svg: `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>` },
+  { label: "キャンセル", text: "キャンセルされる場合は前日までにインスタDMまたは以下の連絡先へご連絡ください", svg: `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>` },
+  { label: "免責", text: "体験会中の怪我については自己責任（またはスポーツ保険の範囲内）となりますのでご了承ください", svg: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>` },
 ];
 ---
 
@@ -115,11 +115,16 @@ const notes = [
       <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">NOTES</span>
       <span style="font-size: 22px; font-weight: 900; color: #33291F;">注意事項</span>
     </h2>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-      {notes.map(note => (
-        <div style="background: #FFFDF8; border-radius: 12px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; border: 1px solid rgba(160, 143, 120, 0.14);">
-          <span style="font-size: 20px; flex-shrink: 0;">{note.icon}</span>
-          <p style="margin: 0; font-size: 14px; line-height: 1.85; color: #4A3F34; font-weight: 500;">{note.text}</p>
+    <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; border: 1px solid rgba(160, 143, 120, 0.16);">
+      {notes.map((note, i) => (
+        <div style={`display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; ${i < notes.length - 1 ? 'border-bottom: 1px solid rgba(160, 143, 120, 0.12);' : ''}`}>
+          <span style="color: #E0604A; flex-shrink: 0; margin-top: 3px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={note.svg}></svg>
+          </span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #E0604A; letter-spacing: 0.1em;">{note.label}</span>
+            <span style="font-size: 15px; font-weight: 600; color: #33291F; line-height: 1.7;">{note.text}</span>
+          </div>
         </div>
       ))}
     </div>
