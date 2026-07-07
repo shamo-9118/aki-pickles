@@ -3,7 +3,7 @@ import '../styles/global.css';
 
 const instagramUrl = "https://www.instagram.com/aki.pickles/";
 const formUrl = "https://forms.gle/vqgDeHjSxUw93nic7";
-const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.2 L14.8 14.5 L15.3 19 L12 15.9 L8.7 19 L9.2 14.5 L5.2 15.2 L7.6 11.6 L4 9.2 L8.6 8.2 L7 4.6 L10.7 6.2 Z";
+const ended = new Date() > new Date("2026-08-09T12:00:00+09:00");
 
 const overview = [
   { label: "開催日", value: "8月9日（日）10:00 〜 12:00", svg: `<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>` },
@@ -55,35 +55,41 @@ const notes = [
   <img src="/momiji.webp" alt="" width="120" height="120" style="position: absolute; left: -20px; bottom: 60px; opacity: 0.05; transform: rotate(-30deg);" />
 
   <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; position: relative;">
-    <div style="display: inline-flex; align-items: center; gap: 8px; background: #E0604A; color: #fff; font-family: Jost, sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.2em; padding: 6px 16px; border-radius: 999px;">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="{leafPath}"></path></svg>
+    <div style="display: inline-flex; align-items: center; background: #E0604A; color: #fff; font-family: Jost, sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.2em; padding: 6px 20px; border-radius: 999px;">
       EVENT
     </div>
     <h1 style="margin: 0; font-size: clamp(26px, 6vw, 42px); font-weight: 900; color: #33291F; line-height: 1.4; letter-spacing: 0.02em;">
       第1回<br>ピックルボール体験会
     </h1>
-    <p style="margin: 0; font-size: 16px; font-weight: 700; color: #E0604A; font-family: Jost, sans-serif; letter-spacing: 0.1em;">
+    <p style="margin: 0; font-size: 16px; font-weight: 700; color: #E0604A; font-family: Jost, sans-serif; letter-spacing: 0.1em; white-space: nowrap;">
       2026.08.09 SUN 10:00–12:00
     </p>
     <p style="margin: 0; font-size: 15px; line-height: 2; color: #6B5F4E; font-weight: 500; max-width: 480px;">
       こんにちは！AKI PICKLES（あきぴっくるず）です。<br>ピックルボールを一緒に楽しみませんか？<br>初心者の方も大歓迎です！
     </p>
 
-    <!-- CTAボタン -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px;">
-      <a href={formUrl} target="_blank" rel="noopener"
-        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
-        class="btn-primary">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Googleフォームで申し込む
-      </a>
-      <a href={instagramUrl} target="_blank" rel="noopener"
-        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
-        class="btn-outline">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
-        Instagram DM で申し込む
-      </a>
-    </div>
+    <!-- 終了バナー / CTAボタン -->
+    {ended ? (
+      <div style="background: #F0EBE3; border: 1.5px solid rgba(160, 143, 120, 0.35); border-radius: 14px; padding: 20px 28px; display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 10px; width: 100%; max-width: 480px;">
+        <span style="font-size: 16px; font-weight: 900; color: #A08F78; letter-spacing: 0.06em;">この体験会は終了しました</span>
+        <span style="font-size: 13px; color: #B0A090; font-weight: 500;">ご参加いただいた皆さまありがとうございました！</span>
+      </div>
+    ) : (
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px;">
+        <a href={formUrl} target="_blank" rel="noopener"
+          style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
+          class="btn-primary">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Googleフォームで申し込む
+        </a>
+        <a href={instagramUrl} target="_blank" rel="noopener"
+          style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
+          class="btn-outline">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+          Instagram DM で申し込む
+        </a>
+      </div>
+    )}
   </div>
 </section>
 
@@ -151,21 +157,35 @@ const notes = [
 <!-- 下部CTA -->
 <section style="padding: 20px 20px 80px; background: #FFFDF8; border-top: 1px solid rgba(160, 143, 120, 0.12);">
   <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
-    <p style="margin: 0; font-size: 15px; font-weight: 700; color: #33291F;">参加希望の方はこちらからお申し込みください！</p>
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
-      <a href={formUrl} target="_blank" rel="noopener"
-        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
-        class="btn-primary">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Googleフォームで申し込む
-      </a>
-      <a href={instagramUrl} target="_blank" rel="noopener"
-        style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
-        class="btn-outline">
-        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
-        Instagram DM で申し込む
-      </a>
-    </div>
+    {ended ? (
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <p style="margin: 0; font-size: 15px; font-weight: 700; color: #A08F78;">この体験会は終了しました</p>
+        <p style="margin: 0; font-size: 13px; color: #B0A090; line-height: 1.8;">次回の体験会情報は Instagram でお知らせします</p>
+        <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline"
+          style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s; margin-top: 4px;">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+          Instagram をフォローする
+        </a>
+      </div>
+    ) : (
+      <>
+        <p style="margin: 0; font-size: 15px; font-weight: 700; color: #33291F;">参加希望の方はこちらからお申し込みください！</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
+          <a href={formUrl} target="_blank" rel="noopener"
+            style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 28px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32); transition: background 0.2s, transform 0.2s;"
+            class="btn-primary">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Googleフォームで申し込む
+          </a>
+          <a href={instagramUrl} target="_blank" rel="noopener"
+            style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;"
+            class="btn-outline">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+            Instagram DM で申し込む
+          </a>
+        </div>
+      </>
+    )}
   </div>
 </section>
 
