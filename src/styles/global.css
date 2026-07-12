@@ -68,13 +68,14 @@ a.footer-ig:hover { background: #E0604A !important; }
 .news-card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(60, 54, 48, 0.1) !important; }
 
 /* IG slider nav (hidden on desktop) */
-.ig-nav-btn { display: none; }
+.ig-slider-controls { display: none; }
 .ig-slider-wrap { position: relative; }
 
 /* Mobile sliders */
 @media (max-width: 767px) {
   .about-grid {
     display: flex !important;
+    gap: 12px !important;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -83,20 +84,22 @@ a.footer-ig:hover { background: #E0604A !important; }
   }
   .about-grid::-webkit-scrollbar { display: none; }
   .about-card {
-    min-width: 76vw;
+    width: calc(100vw - 80px) !important;
     flex-shrink: 0;
     scroll-snap-align: start;
+    padding: 24px 20px !important;
   }
   .about-clip { overflow: hidden; }
-  .ig-overflow { overflow: hidden; }
+  .ig-slider-wrap { overflow: hidden; }
+  .ig-slider-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
   .ig-nav-btn {
     display: flex;
-    position: absolute;
-    top: 35%;
-    transform: translateY(-50%);
-    z-index: 10;
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: #FFFFFF;
     border: 1px solid rgba(160, 143, 120, 0.2);
@@ -107,12 +110,10 @@ a.footer-ig:hover { background: #E0604A !important; }
     color: #3C3630;
     padding: 0;
   }
-  #ig-prev { left: -4px; }
-  #ig-next { right: -4px; }
   .ig-grid {
     display: flex !important;
     gap: 12px !important;
     transition: transform 0.35s ease;
   }
-  .ig-grid > * { min-width: 72vw; flex-shrink: 0; }
+  .ig-grid > * { width: calc(100vw - 80px); flex-shrink: 0; }
 }

@@ -46,8 +46,8 @@ const scheduleDays = [
 ];
 
 const scheduleRows = [
-  { time: "9:00 – 12:00", marks: ["-", "○", "-", "-", "○", "-", "○"] },
-  { time: "17:00 – 20:00", marks: ["○", "-", "-", "○", "-", "○", "-"] },
+  { time: "9:00 – 12:00", marks: ["-", "-", "-", "-", "-", "-", "-"] },
+  { time: "17:00 – 20:00", marks: ["-", "-", "-", "-", "-", "-", "-"] },
 ];
 
 const scheduleNote = "※ 曜日・時間帯は調整中の仮スケジュールです。確定次第更新します。";
@@ -57,9 +57,7 @@ const placeAddress = "広島県安芸郡府中町";
 const placeAccess = "アクセス情報は活動場所の確定後に掲載します。";
 
 const igPosts = [
-  { caption: "初回練習会を開催しました！初心者から経験者まで、みんなで楽しく汗を流しました🍁", permalink: instagramUrl },
-  { caption: "ラリー練習の様子。少しずつつながるようになってきました！", permalink: instagramUrl },
-  { caption: "体験会の準備中。パドルとボール、揃ってます。お気軽にどうぞ！", permalink: instagramUrl },
+  { caption: "第1回体験会、8月9日(日) 10:00〜12:00 くすのきプラザ大ホールで開催🏓 ラケット・ボール貸出あり、手ぶらでOK！参加費500円。未経験者大歓迎です😊", permalink: "https://www.instagram.com/p/DajrapRkzTc/" },
 ];
 
 const faqs = [
@@ -283,24 +281,29 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
         <span style="font-size: 12px; color: #A08F78;">Instagram 最新投稿より</span>
       </div>
       <div class="ig-slider-wrap">
+        <div id="ig-inner" class="ig-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
+          {igPosts.map(post => (
+            <a href={post.permalink} target="_blank" rel="noopener" class="ig-card" style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 14px; overflow: hidden; text-decoration: none; border: 1px solid rgba(160, 143, 120, 0.16); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+              <div style="aspect-ratio: 1 / 1; background: repeating-linear-gradient(45deg, #F0E7D5 0px, #F0E7D5 14px, #EAE0CA 14px, #EAE0CA 28px); position: relative;">
+                <span style="position: absolute; left: 12px; bottom: 12px; font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: #8A7A62; background: rgba(255, 253, 248, 0.9); padding: 4px 8px; border-radius: 4px;">投稿画像（差し替え予定）</span>
+              </div>
+              <p style="margin: 0; padding: 15px 17px 17px; font-size: 13px; line-height: 1.8; color: #6B5F4E; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">{post.caption}</p>
+            </a>
+          ))}
+          <div class="ig-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FFFFFF; border-radius: 14px; border: 1px dashed rgba(160, 143, 120, 0.35); padding: 32px 24px; gap: 12px; text-align: center;">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#C9BCA4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+            <p style="margin: 0; font-size: 13.5px; font-weight: 600; color: #A08F78; line-height: 1.8;">練習が始まり次第、<br>随時投稿していきます！</p>
+            <p style="margin: 0; font-size: 12px; color: #C9BCA4; line-height: 1.7;">フォローしてお待ちください</p>
+          </div>
+        </div>
+      </div>
+      <div class="ig-slider-controls">
         <button id="ig-prev" class="ig-nav-btn" aria-label="前へ">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <button id="ig-next" class="ig-nav-btn" aria-label="次へ">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </button>
-        <div class="ig-overflow">
-          <div id="ig-inner" class="ig-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px;">
-            {igPosts.map(post => (
-              <a href={post.permalink} target="_blank" rel="noopener" class="ig-card" style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 14px; overflow: hidden; text-decoration: none; border: 1px solid rgba(160, 143, 120, 0.16); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                <div style="aspect-ratio: 1 / 1; background: repeating-linear-gradient(45deg, #F0E7D5 0px, #F0E7D5 14px, #EAE0CA 14px, #EAE0CA 28px); position: relative;">
-                  <span style="position: absolute; left: 12px; bottom: 12px; font-family: ui-monospace, Menlo, monospace; font-size: 10.5px; color: #8A7A62; background: rgba(255, 253, 248, 0.9); padding: 4px 8px; border-radius: 4px;">投稿画像（差し替え予定）</span>
-                </div>
-                <p style="margin: 0; padding: 15px 17px 17px; font-size: 13px; line-height: 1.8; color: #6B5F4E;">{post.caption}</p>
-              </a>
-            ))}
-          </div>
-        </div>
       </div>
       <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline" style="align-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 13px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s;">
         Instagramでもっと見る
