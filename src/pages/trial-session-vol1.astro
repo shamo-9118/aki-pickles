@@ -4,6 +4,7 @@ import '../styles/global.css';
 const instagramUrl = "https://www.instagram.com/aki.pickles/";
 const formUrl = "https://forms.gle/vqgDeHjSxUw93nic7";
 const ended = new Date() > new Date("2026-08-09T12:00:00+09:00");
+const closed = true;
 
 const overview = [
   { label: "開催日", value: "8月9日（日）10:00 〜 12:00", svg: `<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>` },
@@ -73,6 +74,11 @@ const notes = [
       <div style="background: #F0EBE3; border: 1.5px solid rgba(160, 143, 120, 0.35); border-radius: 14px; padding: 20px 28px; display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 10px; width: 100%; max-width: 480px;">
         <span style="font-size: 16px; font-weight: 900; color: #A08F78; letter-spacing: 0.06em;">この体験会は終了しました</span>
         <span style="font-size: 13px; color: #B0A090; font-weight: 500;">ご参加いただいた皆さまありがとうございました！</span>
+      </div>
+    ) : closed ? (
+      <div style="background: #FFF3F0; border: 1.5px solid rgba(224, 96, 74, 0.3); border-radius: 14px; padding: 20px 28px; display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 10px; width: 100%; max-width: 480px;">
+        <span style="font-size: 16px; font-weight: 900; color: #E0604A; letter-spacing: 0.04em;">定員に達したため締め切りました</span>
+        <span style="font-size: 13px; color: #A08F78; font-weight: 500;">お申し込みありがとうございました！</span>
       </div>
     ) : (
       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 10px;">
@@ -214,6 +220,16 @@ const notes = [
       <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
         <p style="margin: 0; font-size: 15px; font-weight: 700; color: #A08F78;">この体験会は終了しました</p>
         <p style="margin: 0; font-size: 13px; color: #B0A090; line-height: 1.8;">次回の体験会情報は Instagram でお知らせします</p>
+        <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline"
+          style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s; margin-top: 4px;">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
+          Instagram をフォローする
+        </a>
+      </div>
+    ) : closed ? (
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <p style="margin: 0; font-size: 15px; font-weight: 700; color: #E0604A;">定員に達したため締め切りました</p>
+        <p style="margin: 0; font-size: 13px; color: #A08F78; line-height: 1.8;">次回の体験会情報は Instagram でお知らせします</p>
         <a href={instagramUrl} target="_blank" rel="noopener" class="btn-outline"
           style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 700; color: #E0604A; background: #FFFFFF; border: 1.5px solid rgba(224, 96, 74, 0.4); text-decoration: none; padding: 14px 26px; border-radius: 999px; transition: border-color 0.2s, background 0.2s; margin-top: 4px;">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6"></circle></svg>
