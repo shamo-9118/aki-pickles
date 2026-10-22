@@ -59,6 +59,13 @@ const scheduleRows = [
 
 const scheduleNote = "※ 曜日・時間帯は調整中の仮スケジュールです。確定次第更新します。";
 
+// アプリ(connect)のSupabaseからライブでスケジュールをSupabaseの匿名キーで読む。
+// Vercel の環境変数 PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY を設定しておく。
+// 未設定でもサイトは壊れず、ライブ欄は非表示になる（下の仮スケジュール表は常に出る）。
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? "";
+const CONNECT_URL = import.meta.env.PUBLIC_CONNECT_URL ?? "https://connect.akipickles.com";
+
 const placeName = "安芸府中生涯学習センター くすのきプラザ";
 const placeAddress = "〒735-0006 広島県安芸郡府中町本町1丁目10-15";
 const placeAccess = "Googleマップ等でご確認ください。";
@@ -332,6 +339,17 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">SCHEDULE</span>
       <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動予定</h2>
     </div>
+
+    <!-- 直近の練習（アプリから自動表示・ゲスト参加受付中） -->
+    <div id="live-schedule" style="display: none; flex-direction: column; gap: 14px;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">直近の練習</h3>
+      <p style="margin: 0; font-size: 13px; color: #A08F78; line-height: 1.8;">
+        下の「ゲストとして参加登録」から、はじめての方も参加できます。アカウントを作ると練習予定の確認と参加登録ができます。
+      </p>
+      <div id="live-schedule-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </div>
+
+    <h3 id="weekly-heading" style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">ふだんの活動時間</h3>
     <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(160, 143, 120, 0.2); background: #FFFFFF;">
       <div style="min-width: 560px;">
         <div style="display: grid; grid-template-columns: 140px repeat(7, 1fr); background: #FFF9EF; border-bottom: 2px solid rgba(224, 96, 74, 0.25);">
@@ -356,6 +374,73 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
     <p style="margin: 0; font-size: 12.5px; color: #A08F78; line-height: 1.8;">{scheduleNote}</p>
   </div>
 </section>
+
+<script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY, CONNECT_URL }}>
+  // アプリのSupabaseから、今日以降の練習予定を匿名で読んで「直近の練習」に表示する。
+  // 返るのは安全な項目だけ（日付・タイトル・時間・場所・定員・参加人数）。氏名は含まれない。
+  (async () => {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return // 未設定なら仮スケジュール表だけ出す
+    const wrap = document.getElementById("live-schedule")
+    const list = document.getElementById("live-schedule-list")
+    const weeklyHeading = document.getElementById("weekly-heading")
+    if (!wrap || !list) return
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]))
+    const WD = ["日", "月", "火", "水", "木", "金", "土"]
+    const fmtDate = (ymd) => {
+      const [y, m, d] = ymd.split("-").map(Number)
+      const wd = new Date(y, m - 1, d).getDay()
+      return `${m}月${d}日（${WD[wd]}）`
+    }
+    const hhmm = (t) => (t ? String(t).slice(0, 5) : "")
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/public_schedule`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: "{}",
+      })
+      if (!res.ok) return
+      const rows = await res.json()
+      if (!Array.isArray(rows) || rows.length === 0) return
+
+      list.innerHTML = rows
+        .slice(0, 8)
+        .map((e) => {
+          const cap =
+            e.max_participants != null
+              ? `${e.participant_count ?? 0} / ${e.max_participants} 名`
+              : `${e.participant_count ?? 0} 名参加`
+          const time = [hhmm(e.start_time), hhmm(e.end_time)].filter(Boolean).join(" – ")
+          const guestUrl = `${CONNECT_URL}/guest-signup?event=${encodeURIComponent(e.id)}`
+          return `
+            <div style="border: 1px solid rgba(160,143,120,0.22); border-radius: 14px; background: #FFFFFF; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px;">
+                <span style="font-size: 15px; font-weight: 800; color: #E0604A;">${esc(fmtDate(e.date))}</span>
+                <span style="font-size: 15px; font-weight: 700; color: #33291F;">${esc(e.title)}</span>
+              </div>
+              <div style="font-size: 13px; color: #6B5F4E; line-height: 1.7;">
+                ${time ? `<span>⏰ ${esc(time)}</span>　` : ""}${e.location ? `<span>📍 ${esc(e.location)}</span>　` : ""}<span>👥 ${esc(cap)}</span>
+              </div>
+              <a href="${guestUrl}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; background: #E0604A; color: #FFFFFF; font-size: 13px; font-weight: 800; text-decoration: none; padding: 9px 16px; border-radius: 10px;">
+                ゲストとして参加登録
+              </a>
+            </div>`
+        })
+        .join("")
+
+      wrap.style.display = "flex"
+      // ライブ予定が出たら、仮スケジュール表の見出しを控えめにする
+      if (weeklyHeading) weeklyHeading.textContent = "ふだんの活動時間（目安）"
+    } catch {
+      // 取得に失敗しても、仮スケジュール表はそのまま表示される
+    }
+  })()
+</script>
 
 <!-- 活動場所 -->
 <section id="place" style="padding: 84px 20px; background: #FAF4E8;">
