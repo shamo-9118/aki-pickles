@@ -58,9 +58,56 @@ a.footer-ig:hover { background: #E0604A !important; }
 .faq-summary:focus,
 .faq-summary:focus-visible { outline: none; }
 
-/* Mobile menu hidden by default */
-#mobile-menu { display: none; }
-#mobile-menu.open { display: flex; }
+/* Mobile menu — アニメ付きドロップダウン */
+#mobile-menu {
+  display: flex;
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  flex-direction: column;
+  background: #FFFDF8;
+  border-bottom: 1px solid rgba(224, 96, 74, 0.14);
+  box-shadow: 0 18px 34px rgba(51, 41, 31, 0.16);
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity .3s ease, transform .34s cubic-bezier(.22,.61,.36,1), visibility .34s;
+  z-index: 95;
+}
+#mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; visibility: visible; }
+/* 項目を少しずつ出すおしゃれなスタッガー */
+#mobile-menu .mobile-nav-link { opacity: 0; transform: translateY(-8px); transition: opacity .28s ease, transform .28s cubic-bezier(.22,.61,.36,1); }
+#mobile-menu.open .mobile-nav-link { opacity: 1; transform: translateY(0); }
+#mobile-menu.open .mobile-nav-link:nth-child(1) { transition-delay: .05s; }
+#mobile-menu.open > a.mobile-nav-link:nth-child(2) { transition-delay: .10s; }
+#mobile-menu.open > a.mobile-nav-link:nth-child(3) { transition-delay: .15s; }
+#mobile-menu.open > a.mobile-nav-link:nth-child(4) { transition-delay: .20s; }
+#mobile-menu.open > a.mobile-nav-link:nth-child(5) { transition-delay: .25s; }
+#mobile-menu.open > div { transition-delay: .30s; }
+
+/* メニューの背景オーバーレイ */
+#menu-overlay {
+  position: fixed; inset: 0;
+  background: rgba(33, 25, 15, 0.42);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .3s ease, visibility .3s;
+  z-index: 90;
+}
+#menu-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* メニュー展開中はページをスクロールさせない */
+body.menu-open { overflow: hidden; }
+
+/* 活動場所の切り替え（セグメント/スライドボタン＋カルーセル） */
+#place-tabs { position: relative; display: inline-flex; background: #F3EBDC; border-radius: 999px; padding: 4px; }
+#place-tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: 999px; background: #E0604A; transition: transform .38s cubic-bezier(.22,.61,.36,1), width .38s cubic-bezier(.22,.61,.36,1); z-index: 0; }
+.place-tab { position: relative; z-index: 1; border: none; background: none; cursor: pointer; padding: 9px 18px; font-size: 13px; font-weight: 700; color: #6B5F4E; white-space: nowrap; transition: color .3s ease; font-family: inherit; }
+.place-tab.active { color: #FFFFFF; }
+#place-viewport { overflow: hidden; }
+#place-track { display: flex; transition: transform .45s cubic-bezier(.22,.61,.36,1); }
+.place-slide { flex: 0 0 100%; min-width: 100%; }
 
 /* Hero slides */
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s ease; }
