@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import NewsCard from '../components/NewsCard.astro';
+import { news } from '../data/news.js';
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>お知らせ一覧｜AKI PICKLES</title>
+  <meta name="description" content="AKI PICKLES（あきぴっくるず）のお知らせ一覧。練習・体験会・クラブからのご案内を掲載しています。">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body style="background: #FFFDF8;">
+
+<!-- ヘッダー -->
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250, 244, 232, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(224, 96, 74, 0.14);">
+  <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+      <img src="/logo.webp" alt="AKI PICKLES" style="height: 42px; width: auto; display: block; mix-blend-mode: multiply;">
+      <span style="font-size: 11px; font-weight: 500; color: #A08F78; letter-spacing: 0.1em;">あきぴっくるず</span>
+    </a>
+    <a href="/" style="font-size: 13px; font-weight: 600; color: #E0604A; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5 M11 6l-6 6 6 6"></path></svg>
+      トップへ戻る
+    </a>
+  </div>
+</header>
+
+<main style="padding: 110px 20px 80px;">
+  <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">NEWS</span>
+      <h1 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">お知らせ一覧</h1>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      {news.map((item) => <NewsCard item={item} />)}
+    </div>
+  </div>
+</main>
+
+<!-- フッター -->
+<footer style="background: #33291F; color: #D8C7A8; padding: 28px 20px;">
+  <div style="max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+    <span style="font-size: 11.5px; color: #A08F78;">© 2026 AKI PICKLES. All rights reserved.</span>
+    <a href="/" style="font-size: 13px; font-weight: 600; color: #D8C7A8; text-decoration: none;">トップへ戻る</a>
+  </div>
+</footer>
+
+</body>
+</html>
