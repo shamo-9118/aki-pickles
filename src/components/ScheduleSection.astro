@@ -22,6 +22,10 @@ const SIGNUP_BASE = `${CONNECT_URL}/guest-signup?event=`;
       <p class="aps-lead">ゲスト参加歓迎。日程を選ぶと参加登録ページへ進みます。</p>
     </header>
     <div class="aps-body" id="aps-root" aria-live="polite"></div>
+    <p class="aps-hint">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>参加登録ができるのは<b>練習日の5日前から</b>です。まだ登録できない練習も、先に<b>アカウントを作成</b>しておけば、登録開始日になったらそのまますぐに参加登録できます。</span>
+    </p>
   </section>
 </div>
 
@@ -151,9 +155,30 @@ a.apr:hover { background: var(--ap-soft); }
 .aps-badge.few  { background: var(--ap-few-bg); color: var(--ap-few); }
 .aps-badge.full { background: var(--ap-full-bg); color: var(--ap-body); }
 .aps-badge.open { background: #fff; color: var(--ap-body); box-shadow: inset 0 0 0 1px var(--ap-line-strong); }
+.aps-badge.soon { background: var(--ap-soft-2); color: var(--ap-body); box-shadow: inset 0 0 0 1px var(--ap-line-strong); }
 
-/* 折りたたみ：.is-extra は展開前は非表示 */
-.apl:not(.is-expanded) .is-extra { display: none; }
+/* 「次の練習」：登録開始日のお知らせ */
+.apf-opens { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ap-body); }
+.apf-opens svg { color: var(--ap-mute); }
+
+/* 登録前提の案内 */
+.aps-hint { display: flex; align-items: flex-start; gap: 10px; margin: 4px 2px 0; padding: 14px 16px;
+  border-radius: 14px; background: var(--ap-soft); font-size: 13px; line-height: 1.75; color: var(--ap-body); }
+.aps-hint svg { flex: none; margin-top: 2px; color: var(--ap-mute); }
+.aps-hint b { font-weight: 700; color: var(--ap-ink); }
+
+/* 折りたたみ：.is-extra は展開前は非表示（開閉アニメーション付き） */
+.apl li.is-extra {
+  display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden;
+  transition: grid-template-rows .34s cubic-bezier(.22,.61,.36,1), opacity .3s ease, visibility .34s;
+}
+.apl li.is-extra > * { min-height: 0; overflow: hidden; }
+.apl.is-expanded li.is-extra { grid-template-rows: 1fr; opacity: 1; visibility: visible; }
+.apl h4.is-extra {
+  max-height: 0; opacity: 0; visibility: hidden; overflow: hidden;
+  transition: max-height .34s cubic-bezier(.22,.61,.36,1), opacity .3s ease, visibility .34s;
+}
+.apl.is-expanded h4.is-extra { max-height: 60px; opacity: 1; visibility: visible; }
 .apl-more { padding: 12px 16px 16px; border-top: 1px solid var(--ap-line); }
 .apl-more button { width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px;
   border: 1px solid var(--ap-line-strong); border-radius: 12px; background: #fff; color: var(--ap-ink);
@@ -221,6 +246,7 @@ a.apr:hover { background: var(--ap-soft); }
   var SIGNUP = SIGNUP_BASE;
   var LIMIT = 5;          // 「次の練習」以外で最初に見せる行数
   var FEW = 3;            // 残りこの数以下で「残りわずか」
+  var REG_DAYS = 5;       // 練習日のこの日数前から参加登録できる（アプリの VISITOR_RESPONSE_DAYS と合わせる）
   var WD = ['日','月','火','水','木','金','土'];
   var MON_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   var MON_LONG = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
@@ -261,10 +287,17 @@ a.apr:hover { background: var(--ap-soft); }
     var title = String(e.title || '練習').replace(/\s*[（(][^）)]*日[）)]\s*$/, ''); // 末尾の「（10月24日）」を除去
     var loc = e.location || '';
     var time = hm(e.start_time) + (e.end_time ? '–' + hm(e.end_time) : '');
+    var days = Math.round((d - today) / 86400000);
+    var canReg = days <= REG_DAYS;                 // 参加登録できる期間に入っているか
+    var od = new Date(d.getTime()); od.setDate(od.getDate() - REG_DAYS); // 登録開始日
     return {
       id: e.id, d: d, w: w, n: n, max: max, rem: rem, st: st, title: title, loc: loc, time: time,
       locInTitle: !!loc && title.indexOf(loc) !== -1,
-      days: Math.round((d - today) / 86400000),
+      days: days,
+      canReg: canReg,
+      openMd: (od.getMonth() + 1) + '月' + od.getDate() + '日',
+      openWd: WD[od.getDay()],
+      openShort: (od.getMonth() + 1) + '/' + od.getDate(),
       href: SIGNUP + encodeURIComponent(e.id),
       wdCls: w === 6 ? ' is-sat' : w === 0 ? ' is-sun' : '',
       md: (d.getMonth() + 1) + '/' + d.getDate(),
@@ -287,10 +320,17 @@ a.apr:hover { background: var(--ap-soft); }
         '<span class="apf-cap-state" style="color:' + stCol + '">' + stTxt + '</span></div>' +
         '<div class="apf-bar" role="img" aria-label="定員' + x.max + '名中' + x.n + '名参加"><span style="width:' + pct + '%' + (x.st === 'full' ? ';background:#A08F78' : '') + '"></span></div></div>';
     }
-    var actions = x.st === 'full'
-      ? '<span class="aps-cta" aria-disabled="true">満席のため受付終了</span>' +
-        (nextOpen ? '<a class="aps-sublink" href="' + nextOpen.href + '">次に空きがある日：' + nextOpen.md + '（' + WD[nextOpen.w] + '）' + icon(I.arrowRight, 18) + '</a>' : '')
-      : '<a class="aps-cta" href="' + x.href + '">' + icon(I.userPlus, 20) + 'この日にゲスト参加</a>';
+    var actions;
+    if (x.st === 'full') {
+      actions = '<span class="aps-cta" aria-disabled="true">満席のため受付終了</span>' +
+        (nextOpen ? '<a class="aps-sublink" href="' + nextOpen.href + '">次に空きがある日：' + nextOpen.md + '（' + WD[nextOpen.w] + '）' + icon(I.arrowRight, 18) + '</a>' : '');
+    } else if (!x.canReg) {
+      // まだ参加登録期間に入っていない：先にアカウントだけ作成しておける
+      actions = '<a class="aps-cta" href="' + x.href + '">' + icon(I.userPlus, 20) + '先にアカウントを作成</a>' +
+        '<span class="apf-opens">' + icon(I.clock, 16) + '<span>' + x.openMd + '（' + x.openWd + '）から参加登録できます</span></span>';
+    } else {
+      actions = '<a class="aps-cta" href="' + x.href + '">' + icon(I.userPlus, 20) + 'この日にゲスト参加</a>';
+    }
 
     return '<article class="apf" aria-label="次の練習">' +
       '<div class="apf-date">' +
@@ -311,17 +351,26 @@ a.apr:hover { background: var(--ap-soft); }
   }
 
   function row(x, extra) {
+    var soon = x.st !== 'full' && !x.canReg; // まだ参加登録期間に入っていない
     var cls = 'apr' + (x.st === 'full' ? ' is-full' : '');
     var label = (x.d.getMonth() + 1) + '月' + x.d.getDate() + '日（' + WD[x.w] + '）' + x.time + ' ' + x.title + '、' + x.badge;
+    var badge = soon
+      ? '<span class="aps-badge soon">受付 ' + x.openShort + '〜</span>'
+      : '<span class="aps-badge ' + x.st + '">' + x.badge + '</span>';
     var inner =
       '<span class="apr-d"><span class="apr-day">' + x.d.getDate() + '</span><span class="apr-wd' + (x.st === 'full' ? '' : x.wdCls) + '">' + WD[x.w] + '</span></span>' +
       '<span class="apr-t">' + esc(x.title) + '</span>' +
       '<span class="apr-m' + (x.locInTitle ? '' : ' show-loc') + '"><span class="apr-ic"' + MUTE + '>' + icon(I.clock, 14) + '</span><span class="apr-time">' + esc(x.time) + '</span>' +
         (x.loc ? '<span class="apr-sep" aria-hidden="true">·</span><span class="apr-loc">' + esc(x.loc) + '</span>' : '') + '</span>' +
-      '<span class="apr-b"><span class="aps-badge ' + x.st + '">' + x.badge + '</span></span>';
+      '<span class="apr-b">' + badge + '</span>';
     var li = '<li' + (extra ? ' class="is-extra"' : '') + '>';
     if (x.st === 'full') {
       return li + '<div class="' + cls + '" aria-label="' + esc(label) + '">' + inner + '<span class="apr-g">受付終了</span></div></li>';
+    }
+    if (soon) {
+      // 期間外でもアカウント作成はできるので、登録画面へのリンクは残す
+      return li + '<a class="' + cls + '" href="' + x.href + '" aria-label="' + esc(label + '。' + x.openMd + '（' + x.openWd + '）から参加登録できます。先にアカウント作成も可能です') + '">' + inner +
+        '<span class="apr-g">' + icon(I.chevRight, 18) + '</span></a></li>';
     }
     return li + '<a class="' + cls + '" href="' + x.href + '" aria-label="' + esc(label + '。ゲスト参加登録へ') + '">' + inner +
       '<span class="apr-g"><span class="lbl">参加登録</span>' + icon(I.chevRight, 18) + '</span></a></li>';

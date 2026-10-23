@@ -101,7 +101,7 @@ a.footer-ig:hover { background: #E0604A !important; }
 body.menu-open { overflow: hidden; }
 
 /* 活動場所の切り替え（セグメント/スライドボタン＋カルーセル） */
-#place-tabs { position: relative; display: inline-flex; background: #F3EBDC; border-radius: 999px; padding: 4px; }
+#place-tabs { position: relative; display: inline-flex; align-self: flex-start; max-width: 100%; background: #F3EBDC; border-radius: 999px; padding: 4px; }
 #place-tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: 999px; background: #E0604A; transition: transform .38s cubic-bezier(.22,.61,.36,1), width .38s cubic-bezier(.22,.61,.36,1); z-index: 0; }
 .place-tab { position: relative; z-index: 1; border: none; background: none; cursor: pointer; padding: 9px 18px; font-size: 13px; font-weight: 700; color: #6B5F4E; white-space: nowrap; transition: color .3s ease; font-family: inherit; }
 .place-tab.active { color: #FFFFFF; }
