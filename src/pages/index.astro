@@ -42,23 +42,6 @@ const news = [
   },
 ];
 
-const scheduleDays = [
-  { label: "月", color: "#3C3630" },
-  { label: "火", color: "#3C3630" },
-  { label: "水", color: "#3C3630" },
-  { label: "木", color: "#3C3630" },
-  { label: "金", color: "#3C3630" },
-  { label: "土", color: "#4A7BC2" },
-  { label: "日", color: "#E0604A" },
-];
-
-const scheduleRows = [
-  { time: "9:00 – 12:00", marks: ["-", "-", "-", "-", "-", "-", "-"] },
-  { time: "17:00 – 20:00", marks: ["-", "-", "-", "-", "-", "-", "-"] },
-];
-
-const scheduleNote = "※ 曜日・時間帯は調整中の仮スケジュールです。確定次第更新します。";
-
 // アプリ(connect)のSupabaseからライブでスケジュールをSupabaseの匿名キーで読む。
 // Vercel の環境変数 PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY を設定しておく。
 // 未設定でもサイトは壊れず、ライブ欄は非表示になる（下の仮スケジュール表は常に出る）。
@@ -340,49 +323,23 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動予定</h2>
     </div>
 
-    <!-- 直近の練習（アプリから自動表示・ゲスト参加受付中） -->
+    <!-- 練習予定（アプリから自動表示・ゲスト参加受付中） -->
     <div id="live-schedule" style="display: none; flex-direction: column; gap: 14px;">
-      <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">直近の練習</h3>
       <p style="margin: 0; font-size: 13px; color: #A08F78; line-height: 1.8;">
         下の「ゲストとして参加登録」から、はじめての方も参加できます。アカウントを作ると練習予定の確認と参加登録ができます。
       </p>
       <div id="live-schedule-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
     </div>
-
-    <h3 id="weekly-heading" style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">ふだんの活動時間</h3>
-    <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(160, 143, 120, 0.2); background: #FFFFFF;">
-      <div style="min-width: 560px;">
-        <div style="display: grid; grid-template-columns: 140px repeat(7, 1fr); background: #FFF9EF; border-bottom: 2px solid rgba(224, 96, 74, 0.25);">
-          <div style="padding: 15px 18px; font-size: 13px; font-weight: 700; color: #A08F78;">時間帯</div>
-          {scheduleDays.map(day => (
-            <div style={`padding: 15px 8px; font-size: 14px; font-weight: 700; color: ${day.color}; text-align: center;`}>{day.label}</div>
-          ))}
-        </div>
-        {scheduleRows.map(row => (
-          <div style="display: grid; grid-template-columns: 140px repeat(7, 1fr); border-bottom: 1px solid rgba(160, 143, 120, 0.14);">
-            <div style="padding: 17px 18px; font-family: Jost, sans-serif; font-size: 14px; font-weight: 600; color: #3C3630; white-space: nowrap; display: flex; align-items: center;">{row.time}</div>
-            {row.marks.map((mark, i) => {
-              const isActive = mark === "○";
-              return (
-                <div style={`padding: 17px 8px; display: flex; align-items: center; justify-content: center; font-size: ${isActive ? '18px' : '14px'}; font-weight: 700; color: ${isActive ? '#E0604A' : '#C9BCA4'}; background: ${isActive ? 'rgba(224, 96, 74, 0.07)' : 'transparent'};`}>{isActive ? '○' : '–'}</div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-    </div>
-    <p style="margin: 0; font-size: 12.5px; color: #A08F78; line-height: 1.8;">{scheduleNote}</p>
   </div>
 </section>
 
 <script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY, CONNECT_URL }}>
-  // アプリのSupabaseから、今日以降の練習予定を匿名で読んで「直近の練習」に表示する。
+  // アプリのSupabaseから、今日以降の練習予定を匿名で読んで表示する。
   // 返るのは安全な項目だけ（日付・タイトル・時間・場所・定員・参加人数）。氏名は含まれない。
   (async () => {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return // 未設定なら仮スケジュール表だけ出す
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return
     const wrap = document.getElementById("live-schedule")
     const list = document.getElementById("live-schedule-list")
-    const weeklyHeading = document.getElementById("weekly-heading")
     if (!wrap || !list) return
 
     const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]))
@@ -434,10 +391,8 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
         .join("")
 
       wrap.style.display = "flex"
-      // ライブ予定が出たら、仮スケジュール表の見出しを控えめにする
-      if (weeklyHeading) weeklyHeading.textContent = "ふだんの活動時間（目安）"
     } catch {
-      // 取得に失敗しても、仮スケジュール表はそのまま表示される
+      // 取得に失敗しても、ページは壊れない（練習欄が非表示になるだけ）
     }
   })()
 </script>
