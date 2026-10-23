@@ -1,140 +1,199 @@
 ---
 import '../styles/global.css';
 
-// 手順カード用の小さなアイコン（Lucide）
-const stepIcon = {
-  calendar: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/>',
-  tap: '<path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 10a7 7 0 0 1 14 0v4a3 3 0 0 1-3 3h-2"/><path d="m9 13-1 9"/><path d="m14 13 1 9"/>',
-  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
-  key: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>',
-  check: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
-};
-const steps = [
-  { icon: 'calendar', title: '練習を選ぶ', text: 'トップページの「活動予定」から、参加したい練習を選びます。日程・場所・空き状況が確認できます。' },
-  { icon: 'tap', title: '「ゲストとして参加登録」を押す', text: '選んだ練習の「ゲストとして参加登録」ボタンから、登録画面へ進みます。' },
-  { icon: 'pen', title: '必要事項を入力', text: 'お名前（フルネーム）・ふりがな・メールアドレスを入力します。' },
-  { icon: 'key', title: '作成方法を選ぶ', text: 'メールアドレス＋パスワード、または Google アカウントで登録できます。' },
-  { icon: 'check', title: '完了', text: '認証が終わると、選んだ練習に自動で参加登録されます。当日お待ちしています！' },
-];
-const canDo = [
-  '練習予定（日程・場所・空き状況）の確認',
-  '練習への参加登録・取り消し',
-  '管理者へのメッセージ（ご質問・ご相談）',
+const navigation = [
+  ['choose', '練習を選ぶ'],
+  ['profile', '必要事項を入力'],
+  ['account', '登録方法を選ぶ'],
+  ['confirm', 'メールを確認'],
+  ['join', '参加状況を確認'],
 ];
 ---
 
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ゲスト参加の登録方法｜AKI PICKLES</title>
-  <meta name="description" content="AKI PICKLES のホームページから、ゲストとして練習に参加申し込みをする方法と、アプリ『AKI PICKLES connect』のご案内です。">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-</head>
-<body style="background: #FAF4E8;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ゲスト参加の登録方法｜AKI PICKLES</title>
+    <meta name="description" content="実際の画面で紹介する、AKI PICKLESのゲスト参加ガイド。練習の選び方からアカウント作成、確認メール、参加登録・取り消し、お問い合わせまでご案内します。" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+  <body>
+    <header class="guide-header">
+      <a href="/" aria-label="AKI PICKLES トップページ"><img src="/logo.webp" alt="AKI PICKLES" width="108" height="54" /></a>
+      <a href="/">← トップへ戻る</a>
+    </header>
 
-<!-- ヘッダー -->
-<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250, 244, 232, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(224, 96, 74, 0.14);">
-  <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-    <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-      <img src="/logo.webp" alt="AKI PICKLES" style="height: 42px; width: auto; display: block; mix-blend-mode: multiply;">
-      <span style="font-size: 11px; font-weight: 500; color: #A08F78; letter-spacing: 0.1em;">あきぴっくるず</span>
-    </a>
-    <a href="/" style="font-size: 13px; font-weight: 600; color: #E0604A; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5 M11 6l-6 6 6 6"></path></svg>
-      トップへ戻る
-    </a>
-  </div>
-</header>
+    <main>
+      <article class="guide">
+        <header class="intro">
+          <div class="meta"><time datetime="2026-10-23">2026.10.23</time><span>お知らせ</span></div>
+          <p class="eyebrow">GUEST GUIDE</p>
+          <h1>はじめてのゲスト参加。<br />画面を見ながら、ひとつずつ。</h1>
+          <p class="lead">ホームページから練習を選んで、AKI PICKLES CONNECTで参加登録。<br class="desktop-break" />実際の画面に沿って、ご利用の流れをご案内します 🏓</p>
+          <p class="intro-note">インストール不要。スマホやパソコンのブラウザーから使えます。</p>
+          <a class="primary-link" href="/#schedule">練習一覧を見てみる <span aria-hidden="true">→</span></a>
+        </header>
 
-<article style="padding: 110px 20px 80px;">
-  <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+        <aside class="notice" aria-label="参加受付について">
+          <strong>参加登録は、練習日の5日前から。</strong>
+          <p>受付開始前でも、先にアカウントを作成できます。その場合は、受付開始後にアプリから参加登録してください。アカウントの作成だけでは、参加枠は確保されません。</p>
+        </aside>
 
-    <!-- タイトル -->
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <time style="font-family: Jost, sans-serif; font-size: 13px; font-weight: 500; color: #A08F78; letter-spacing: 0.06em;">2026.10.23</time>
-        <span style="font-size: 11px; font-weight: 700; color: #A08F78; background: #F3EBDC; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.08em;">お知らせ</span>
-      </div>
-      <h1 style="margin: 0; font-size: clamp(22px, 5vw, 30px); font-weight: 900; color: #33291F; line-height: 1.5;">
-        ゲスト参加の登録方法・アプリについて
-      </h1>
-      <p style="margin: 0; font-size: 15px; line-height: 2; color: #6B5F4E; font-weight: 500;">
-        公式サイトの「活動予定」から、どなたでも練習の予定を確認し、ゲストとして参加の申し込みができるようになりました。はじめての方も、スマホから数分で登録できます。
-      </p>
-    </div>
+        <nav class="steps-nav" aria-label="登録手順の目次">
+          <ol>{navigation.map(([id, title], index) => <li><a href={`#${id}`}><span>{String(index + 1).padStart(2, '0')}</span>{title}</a></li>)}</ol>
+        </nav>
 
-    <!-- アプリ説明 -->
-    <section style="background: #FFFFFF; border-radius: 16px; padding: 28px 26px; border: 1px solid rgba(160, 143, 120, 0.16); display: flex; flex-direction: column; gap: 14px;">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">AKI PICKLES connect とは？</h2>
-      <p style="margin: 0; font-size: 14.5px; line-height: 1.95; color: #4A3F34;">
-        「AKI PICKLES connect」は、クラブの練習予定の確認・参加登録などができる専用アプリ（Webアプリ）です。インストール不要で、スマホのブラウザからそのまま使えます。
-        ゲストとして登録すると、練習予定の確認・参加登録と、管理者へのお問い合わせができます。
-      </p>
-      <!-- スクショ追加位置：アプリのホーム/活動予定画面など <img src="/guide-app.png" style="width:100%; border-radius:12px; border:1px solid rgba(160,143,120,0.2);" alt="AKI PICKLES connect の画面"> -->
-    </section>
+        <section class="step" id="choose" aria-labelledby="choose-title">
+          <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">ホームページで</p><h2 id="choose-title">参加したい練習を選ぶ</h2></div></div>
+          <p>トップページの「活動予定」で、日程・時間・場所と空き状況を確認します。参加したい練習の<strong>「この日にゲスト参加」</strong>を押すと、ゲスト登録画面へ進みます。</p>
+          <figure class="screen screen-wide">
+            <a class="screen-link" href="/images/guest-guide/schedule.jpg" target="_blank" rel="noopener noreferrer" aria-label="スクリーンショットを別タブで拡大"><img src="/images/guest-guide/schedule.jpg" alt="ホームページの活動予定。日程・会場・参加人数と「この日にゲスト参加」ボタンが表示されている画面" width="1280" height="720" fetchpriority="high" /></a>
+            <figcaption>活動予定の実際の画面。画像はタップ・クリックすると別タブで拡大できます。</figcaption>
+          </figure>
+          <div class="tip"><strong>少し先の練習を選ぶときは</strong><p>「先にアカウントを作成」や「受付 ○/○〜」が目印です。登録画面には進めますが、参加登録は受付開始後に行います。満席の練習は、別の日程もチェックしてみてください。</p></div>
+        </section>
 
-    <!-- 登録手順 -->
-    <section style="display: flex; flex-direction: column; gap: 16px;">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">ゲスト登録の手順</h2>
-      <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px;">
-        {steps.map((s, i) => (
-          <li style="display: flex; gap: 14px; align-items: flex-start; background: #FFFFFF; border: 1px solid rgba(160, 143, 120, 0.16); border-radius: 14px; padding: 18px 18px;">
-            <span style="flex: none; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: #FBEAE4; color: #E0604A; position: relative;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={stepIcon[s.icon]} />
-              <span style="position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: 999px; background: #E0604A; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{i + 1}</span>
-            </span>
-            <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
-              <span style="font-size: 15px; font-weight: 800; color: #33291F;">{s.title}</span>
-              <span style="font-size: 13.5px; line-height: 1.85; color: #6B5F4E;">{s.text}</span>
+        <section class="step" id="profile" aria-labelledby="profile-title">
+          <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">ゲスト登録画面で</p><h2 id="profile-title">お名前と連絡先を入力する</h2></div></div>
+          <div class="step-columns">
+            <div class="step-copy">
+              <p>画面上部に、選んだ練習が表示されます。内容を確認して、次の3項目を入力してください。</p>
+              <ul class="check-list"><li>お名前（フルネーム）</li><li>お名前のふりがな</li><li>メールアドレス</li></ul>
+              <h3>写真の掲載についても選べます</h3>
+              <p>アプリ内での共有と、クラブの公式SNSなどへの掲載を、それぞれ選択できます。あとからプロフィール設定で変更できます。</p>
+              <p class="small-note">掲載している画面は入力前の状態です。ご自身の情報を入力してください。</p>
             </div>
-          </li>
-        ))}
-      </ol>
-      <p style="margin: 0; font-size: 12.5px; color: #A08F78; line-height: 1.8;">
-        ※ 練習日の直前（5日前〜）になると参加登録ができます。少し先の練習は、登録後そのまま予定として確認できます。
-      </p>
-    </section>
+            <figure class="screen screen-app">
+              <a class="screen-link" href="/images/guest-guide/signup.jpg" target="_blank" rel="noopener noreferrer" aria-label="スクリーンショットを別タブで拡大"><img src="/images/guest-guide/signup.jpg" alt="ゲスト登録の実画面。選んだ練習の下に、お名前・ふりがな・メールアドレスの入力欄と写真掲載についての選択欄がある" width="1280" height="720" loading="lazy" /></a>
+              <figcaption>入力欄の下に、写真掲載の選択欄が続きます。</figcaption>
+            </figure>
+          </div>
+        </section>
 
-    <!-- できること -->
-    <section style="background: #FFFFFF; border-radius: 16px; padding: 28px 26px; border: 1px solid rgba(160, 143, 120, 0.16); display: flex; flex-direction: column; gap: 14px;">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: #33291F;">ゲストでできること</h2>
-      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
-        {canDo.map((t) => (
-          <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.8; color: #4A3F34;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E6B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 2px;"><path d="M20 6 9 17l-5-5"/></svg>
-            <span>{t}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
+        <section class="step" id="account" aria-labelledby="account-title">
+          <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">2つの方法から</p><h2 id="account-title">アカウントの作成方法を選ぶ</h2></div></div>
+          <div class="step-columns">
+            <div class="step-copy">
+              <h3>Googleで登録する</h3>
+              <p>必要事項を入力したあと、<strong>「Googleで登録」</strong>を押し、画面の案内に沿って進みます。</p>
+              <h3>メールアドレスで登録する</h3>
+              <p><strong>「メールアドレスとパスワードで登録」</strong>を押すと、画面のようにパスワード欄が開きます。</p>
+              <ol class="text-list"><li>6文字以上のパスワードを入力。</li><li>確認欄にも同じパスワードを入力。</li><li>利用規約を確認して「アカウントを作成」を押す。</li></ol>
+              <p class="small-note">すでにアカウントをお持ちの方は、画面下部の「ログイン」から進めます。</p>
+            </div>
+            <figure class="screen screen-app">
+              <a class="screen-link" href="/images/guest-guide/register-method.jpg" target="_blank" rel="noopener noreferrer" aria-label="スクリーンショットを別タブで拡大"><img src="/images/guest-guide/register-method.jpg" alt="メール登録のパスワード欄を開いた実画面。Googleで登録、パスワード、パスワード確認、アカウントを作成の順に表示されている" width="1280" height="720" loading="lazy" /></a>
+              <figcaption>メール登録では、パスワードと確認欄が表示されます。</figcaption>
+            </figure>
+          </div>
+        </section>
 
-    <!-- CTA -->
-    <div style="display: flex; justify-content: center;">
-      <a href="/#schedule" class="btn-primary" style="display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 800; color: #FFFFFF; background: #E0604A; text-decoration: none; padding: 15px 30px; border-radius: 999px; box-shadow: 0 6px 18px rgba(224, 96, 74, 0.32);">
-        練習一覧を見て申し込む
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14 M13 6l6 6-6 6"></path></svg>
-      </a>
-    </div>
+        <section class="step" id="confirm" aria-labelledby="confirm-title">
+          <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">メールで登録した方</p><h2 id="confirm-title">確認メールのリンクを開く</h2></div></div>
+          <p>登録したメールアドレスに届く確認メールを開き、本文の確認リンクを押してください。登録時と同じブラウザーで開くと、選んだ練習の情報を引き継げます。</p>
+          <div class="tip"><strong>確認メールが見つからないときは</strong><p>迷惑メールフォルダーと、入力したメールアドレスを確認してください。しばらく待っても届かない場合は、<a href="https://www.instagram.com/aki.pickles/">InstagramのDM</a>から運営へご連絡ください。</p></div>
+          <p class="small-note">Googleで登録した方は、Googleの認証を終えたら次の手順へ進んでください。</p>
+        </section>
 
-    <!-- 戻るリンク -->
-    <a href="/news" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #A08F78; text-decoration: none;">
-      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5 M11 6l-6 6 6 6"></path></svg>
-      お知らせ一覧へ
-    </a>
-  </div>
-</article>
+        <section class="step" id="join" aria-labelledby="join-title">
+          <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">アプリに入ったら</p><h2 id="join-title">「参加済み」になっているか確認する</h2></div></div>
+          <p>アプリの「ホーム」や「スケジュール」から、参加したい練習を開きます。<strong>「参加済み」</strong>と表示されていれば、参加登録は完了です。登録が済んでいなければ、受付開始後に<strong>「参加する」</strong>を押してください。</p>
+          <div class="after-grid">
+            <section><h3>予定が変わったら</h3><p>同じ練習の画面で「不参加」を押すと、参加を取り消せます。変更が分かったら、早めの更新をお願いします。</p></section>
+            <section><h3>気になることはチャットへ 💬</h3><p>アプリの「チャット」から、管理者や運営担当者に質問・相談できます。はじめての参加で気になることも、お気軽にどうぞ。</p></section>
+          </div>
+          <p class="small-note">別のブラウザーで確認メールを開いた場合や、受付開始前にアカウントを作成した場合も、練習の参加状況を確認してください。</p>
+        </section>
 
-<!-- フッター -->
-<footer style="background: #33291F; color: #D8C7A8; padding: 28px 20px;">
-  <div style="max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-    <span style="font-size: 11.5px; color: #A08F78;">© 2026 AKI PICKLES. All rights reserved.</span>
-    <a href="/" style="font-size: 13px; font-weight: 600; color: #D8C7A8; text-decoration: none;">トップへ戻る</a>
-  </div>
-</footer>
+        <aside class="capture-note">掲載画像は2026年10月24日時点の実際の画面です。画像内の日程・空き状況は撮影時のものです。最新情報は活動予定からご確認ください。</aside>
 
-</body>
+        <section class="closing" aria-label="ゲスト参加をはじめる">
+          <p class="eyebrow">SEE YOU ON THE COURT</p>
+          <h2>まずは、気になる練習を<br class="mobile-break" />見つけてみてください。</h2>
+          <p>はじめての方も、お待ちしています 🏓</p>
+          <a class="primary-link" href="/#schedule">練習一覧からゲスト参加へ <span aria-hidden="true">→</span></a>
+          <a class="login-link" href="https://connect.akipickles.com/login">登録済みの方はアプリにログイン</a>
+        </section>
+        <a class="back-link" href="/news">← お知らせ一覧へ</a>
+      </article>
+    </main>
+    <footer>© 2026 AKI PICKLES. All rights reserved.</footer>
+  </body>
 </html>
+
+<style>
+  :global(html) { scroll-padding-top: 90px; }
+  :global(body) { background: #fffdf8; color: #33291f; }
+  .guide-header { position: sticky; top: 0; z-index: 10; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(20px, calc((100% - 1040px) / 2)); background: rgba(255,253,248,.96); border-bottom: 1px solid #e9e2d8; }
+  .guide-header img { display: block; width: 86px; height: auto; mix-blend-mode: multiply; }
+  .guide-header a:last-child { font-size: 13px; font-weight: 700; color: #a53f2c; text-decoration: none; }
+  .guide { max-width: 960px; margin: auto; padding: 52px 24px 64px; }
+  .intro { max-width: 780px; margin-bottom: 32px; }
+  .meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #6b5f4e; margin-bottom: 26px; }
+  .meta time { font-family: Jost, sans-serif; letter-spacing: .06em; }
+  .meta span { border: 1px solid #ded5c6; border-radius: 999px; padding: 3px 10px; }
+  .eyebrow { font-family: Jost, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .16em; color: #a53f2c; margin: 0 0 8px; }
+  h1 { font-size: clamp(28px, 4.6vw, 42px); line-height: 1.55; letter-spacing: .02em; margin: 0 0 18px; font-weight: 900; }
+  p { font-size: 15px; line-height: 1.95; color: #594d3e; margin: 0 0 16px; }
+  strong { color: #33291f; font-weight: 800; }
+  .lead { font-size: 16px; }
+  .intro-note, .small-note { font-size: 13px; color: #6b5f4e; }
+  .primary-link { display: inline-flex; align-items: center; gap: 22px; padding: 14px 24px; border-radius: 12px; color: white; background: #b8452f; font-size: 15px; font-weight: 700; text-decoration: none; transition: opacity .15s; }
+  .primary-link:hover { opacity: .8; }
+  .notice { border-left: 3px solid #b8452f; background: #faf4e8; padding: 20px 24px; border-radius: 0 12px 12px 0; }
+  .notice strong { font-size: 16px; }
+  .notice p { margin: 8px 0 0; font-size: 14px; }
+  .steps-nav { margin: 28px 0 52px; }
+  .steps-nav ol { display: flex; flex-wrap: wrap; gap: 10px 20px; list-style: none; padding: 0; margin: 0; }
+  .steps-nav a { display: inline-flex; gap: 7px; font-size: 13px; color: #594d3e; text-decoration: none; }
+  .steps-nav span { color: #a53f2c; font-family: Jost, sans-serif; }
+  a:focus-visible { outline: 3px solid #b8452f; outline-offset: 4px; }
+  .step { margin: 0 0 52px; }
+  .step-heading { display: flex; align-items: center; gap: 18px; border-top: 1px solid #e5ded4; padding-top: 26px; margin-bottom: 20px; }
+  .step-number { font-family: Jost, sans-serif; font-size: 38px; font-weight: 500; color: #b8452f; line-height: 1; }
+  .step-heading .eyebrow { margin-bottom: 4px; letter-spacing: .07em; }
+  h2 { font-size: clamp(20px, 3.5vw, 25px); line-height: 1.6; margin: 0; font-weight: 800; }
+  h3 { font-size: 16px; margin: 24px 0 10px; font-weight: 800; }
+  .screen { margin: 20px 0 0; overflow: hidden; border: 1px solid #e5ded4; border-radius: 16px; background: white; }
+  .screen-link { display: block; }
+  .screen img { display: block; width: 100%; height: auto; }
+  figcaption { padding: 12px 16px; border-top: 1px solid #eee8de; font-size: 12px; line-height: 1.8; color: #6b5f4e; background: #fffdf8; }
+  .tip { padding: 18px 22px; background: #faf4e8; border-radius: 12px; margin-top: 20px; }
+  .tip p { font-size: 14px; margin: 6px 0 0; }
+  .tip a { color: #a53f2c; text-underline-offset: 3px; }
+  .step-columns { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: start; }
+  .step-copy h3:first-child { margin-top: 0; }
+  .screen-app { margin: 0; width: 100%; max-width: 360px; justify-self: center; }
+  /* 実画面の中央にあるフォームを、画像を加工せず読みやすい幅で表示。 */
+  .screen-app img { aspect-ratio: 416 / 720; height: auto; object-fit: cover; object-position: center; }
+  .check-list, .text-list { padding-left: 22px; margin: 14px 0 22px; font-size: 15px; line-height: 2; color: #594d3e; }
+  .after-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 20px; }
+  .after-grid section { border: 1px solid #e5ded4; border-radius: 14px; padding: 20px; background: white; }
+  .after-grid h3 { margin: 0 0 10px; }
+  .after-grid p { font-size: 14px; margin: 0; }
+  .capture-note { font-size: 12px; line-height: 1.85; color: #6b5f4e; margin-bottom: 36px; }
+  .closing { text-align: center; background: #faf4e8; border-radius: 20px; padding: 36px 20px; }
+  .closing p:not(.eyebrow) { margin: 12px 0 24px; font-size: 14px; }
+  .login-link { display: block; width: fit-content; margin: 20px auto 0; font-size: 13px; color: #a53f2c; text-underline-offset: 4px; }
+  .back-link { display: inline-block; font-size: 13px; color: #6b5f4e; margin-top: 32px; text-decoration: none; }
+  footer { padding: 26px 20px; text-align: center; border-top: 1px solid #e5ded4; color: #6b5f4e; font-size: 12px; }
+  .mobile-break { display: none; }
+  @media (max-width: 680px) {
+    .guide { padding: 32px 20px 48px; }
+    .guide-header { height: 64px; }
+    .intro .desktop-break { display: none; }
+    .notice { padding: 18px; }
+    .steps-nav { margin-bottom: 36px; }
+    .step { margin-bottom: 36px; }
+    .step-heading { gap: 14px; }
+    .step-columns, .after-grid { grid-template-columns: 1fr; gap: 20px; }
+    .screen-app { width: min(100%, 340px); }
+    .screen-wide img { width: 100%; }
+    .primary-link { font-size: 14px; padding: 14px 18px; gap: 14px; }
+    .mobile-break { display: initial; }
+  }
+</style>
