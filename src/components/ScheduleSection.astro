@@ -1,0 +1,403 @@
+---
+// 活動予定セクション（案A：「次の練習」＋「この先の予定」）
+// 既存のアプリのSupabaseから、今日以降の練習予定を匿名で読み込み、
+// renderSchedule() で描画する。返るのは安全な項目だけ（日付・タイトル・
+// 時間・場所・定員・参加人数）で、氏名などの個人情報は含まれない。
+// Vercel の環境変数 PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY /
+// PUBLIC_CONNECT_URL を設定しておく。
+const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? "";
+const CONNECT_URL = import.meta.env.PUBLIC_CONNECT_URL ?? "https://connect.akipickles.com";
+const SIGNUP_BASE = `${CONNECT_URL}/guest-signup?event=`;
+---
+
+<!-- 本番用 HTML -->
+<div style="background: #FFFDF8;">
+  <section class="aps" id="schedule" aria-labelledby="aps-title">
+    <header class="aps-head">
+      <div>
+        <span class="aps-eyebrow">SCHEDULE</span>
+        <h2 class="aps-title" id="aps-title">活動予定</h2>
+      </div>
+      <p class="aps-lead">ゲスト参加歓迎。日程を選ぶと参加登録ページへ進みます。</p>
+    </header>
+    <div class="aps-body" id="aps-root" aria-live="polite"></div>
+  </section>
+</div>
+
+<!-- 本番用 CSS（innerHTML で生成する要素にも効くよう is:global） -->
+<style is:global>
+.aps {
+  --ap-primary: #E0604A;        /* アクセント（バー・ドット・フォーカス） */
+  --ap-primary-ink: #C24E39;    /* 白文字を載せるCTA背景（白文字 4.7:1） */
+  --ap-primary-ink-2: #AE4532;  /* CTA hover */
+  --ap-link: #B8452F;           /* 白地上の小さいオレンジ文字（5.3:1） */
+  --ap-ink: #33291F;
+  --ap-body: #6B5F4E;
+  --ap-mute: #A08F78;           /* 装飾専用（アイコン等）。文字には使わない */
+  --ap-bg: #FFFDF8;
+  --ap-card: #FFFFFF;
+  --ap-soft: #FFF9EF;
+  --ap-soft-2: #FAF4E8;
+  --ap-line: rgba(160,143,120,.18);
+  --ap-line-strong: rgba(160,143,120,.32);
+  --ap-ok-bg: #E7F1EA;  --ap-ok: #2F6B47;
+  --ap-few-bg: #FDECE7; --ap-few: #B23F2A;
+  --ap-full-bg: #EFE9DF;
+  --ap-sat: #3A64A8; --ap-sun: #C0402B;
+  --ap-radius: 20px;
+  --ap-shadow: 0 1px 2px rgba(51,41,31,.04), 0 10px 28px rgba(51,41,31,.07);
+  --ap-en: "Jost", system-ui, sans-serif;
+
+  box-sizing: border-box;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 56px 16px 64px;
+  color: var(--ap-ink);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  line-height: 1.5;
+}
+.aps *, .aps *::before, .aps *::after { box-sizing: border-box; }
+.aps svg { flex: none; }
+.aps-en { font-family: var(--ap-en); }
+
+/* ---------- セクション見出し ---------- */
+.aps-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 8px 24px; margin: 0 4px 24px; }
+.aps-eyebrow { display: block; font-family: var(--ap-en); font-size: 12px; font-weight: 600; letter-spacing: .22em; color: var(--ap-link); }
+.aps-title { margin: 6px 0 0; font-size: clamp(26px, 4vw, 32px); font-weight: 700; letter-spacing: .04em; }
+.aps-lead { margin: 0; font-size: 13px; color: var(--ap-body); }
+
+.aps-body { display: flex; flex-direction: column; gap: 20px; }
+
+/* ---------- 次の練習（Featured） ---------- */
+.apf {
+  display: grid; grid-template-columns: 216px minmax(0, 1fr);
+  background: var(--ap-card); border: 1px solid var(--ap-line); border-radius: var(--ap-radius);
+  box-shadow: var(--ap-shadow); overflow: hidden;
+}
+.apf-date {
+  display: grid; grid-template-areas: "pill" "mon" "day" "wd"; align-content: space-between; justify-items: start;
+  row-gap: 2px; padding: 28px; background: var(--ap-soft); border-right: 1px solid var(--ap-line);
+}
+.apf-pill { grid-area: pill; margin-bottom: 28px; display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 11px;
+  border-radius: 999px; background: var(--ap-ink); color: var(--ap-bg); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.apf-pill .aps-en { letter-spacing: .16em; }
+.apf-mon { grid-area: mon; font-family: var(--ap-en); font-size: 14px; font-weight: 500; letter-spacing: .18em; color: var(--ap-body); }
+.apf-day { grid-area: day; font-family: var(--ap-en); font-size: 84px; line-height: .95; font-weight: 500; letter-spacing: -.02em; }
+.apf-wd { grid-area: wd; font-size: 15px; font-weight: 700; color: var(--ap-body); }
+.apf-main { display: flex; flex-direction: column; gap: 18px; padding: 30px 36px 32px; min-width: 0; }
+.apf-title { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.4; }
+.apf-meta { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-size: 15px; color: var(--ap-body); }
+.apf-meta li { display: inline-flex; align-items: center; gap: 8px; }
+.apf-time { font-family: var(--ap-en); font-size: 16px; font-weight: 500; color: var(--ap-ink); }
+.apf-foot { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 28px; }
+.apf-cap { flex: 1 1 240px; display: flex; flex-direction: column; gap: 8px; }
+.apf-cap-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; color: var(--ap-body); }
+.apf-cap-row > span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.apf-cap-num { font-family: var(--ap-en); font-size: 15px; font-weight: 600; color: var(--ap-ink); }
+.apf-cap-state { font-weight: 700; }
+.apf-bar { height: 6px; border-radius: 999px; background: #EFE7D9; overflow: hidden; }
+.apf-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--ap-primary); }
+.apf-actions { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+
+.aps-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px;
+  border: 0; border-radius: 14px; background: var(--ap-primary-ink); color: #fff; font: inherit; font-size: 16px; font-weight: 700;
+  text-decoration: none; box-shadow: 0 6px 16px rgba(194,78,57,.25); transition: background-color .15s, transform .15s;
+}
+.aps-cta:hover { background: var(--ap-primary-ink-2); color: #fff; }
+.aps-cta:active { transform: translateY(1px); }
+.aps-cta[aria-disabled="true"] { background: var(--ap-full-bg); color: var(--ap-body); box-shadow: none; cursor: default; }
+.aps-sublink { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px;
+  font-size: 14px; font-weight: 700; color: var(--ap-link); text-decoration: none; }
+.aps-sublink:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- この先の予定（一覧） ---------- */
+.apl { background: var(--ap-card); border: 1px solid var(--ap-line); border-radius: var(--ap-radius); overflow: hidden; }
+.apl-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px 12px; }
+.apl-head h3 { margin: 0; font-size: 16px; font-weight: 700; }
+.apl-count { font-size: 13px; color: var(--ap-body); }
+.apl-count b { font-family: var(--ap-en); font-size: 15px; font-weight: 600; color: var(--ap-ink); }
+.apl-month { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 10px 28px 7px;
+  background: var(--ap-soft-2); border-top: 1px solid var(--ap-line); font-size: 14px; font-weight: 700; }
+.apl-month .aps-en { font-size: 11px; font-weight: 500; letter-spacing: .2em; color: var(--ap-body); }
+.apl ul { margin: 0; padding: 0; list-style: none; }
+
+.apr {
+  display: grid; grid-template-columns: 56px minmax(0, 1fr) auto auto;
+  grid-template-areas: "d t b g" "d m b g";
+  align-items: center; column-gap: 20px; row-gap: 4px; min-height: 76px; padding: 12px 28px;
+  border-top: 1px solid var(--ap-line); color: var(--ap-ink); text-decoration: none; transition: background-color .15s;
+}
+a.apr:hover { background: var(--ap-soft); }
+.apr-d { grid-area: d; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.apr-day { font-family: var(--ap-en); font-size: 28px; font-weight: 500; }
+.apr-wd { margin-top: 5px; font-size: 12px; font-weight: 700; color: var(--ap-body); }
+.apr-t { grid-area: t; align-self: end; min-width: 0; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.apr-m { grid-area: m; align-self: start; display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 13px; color: var(--ap-body); white-space: nowrap; }
+.apr-time { font-family: var(--ap-en); font-size: 14px; }
+.apr-loc { overflow: hidden; text-overflow: ellipsis; }
+.apr-b { grid-area: b; justify-self: end; }
+.apr-g { grid-area: g; display: inline-flex; align-items: center; gap: 2px; font-size: 13px; font-weight: 700; color: var(--ap-link); }
+.apr.is-full { background: #FCFAF6; color: var(--ap-body); }
+.apr.is-full .apr-g { color: var(--ap-body); font-weight: 400; font-size: 12px; }
+
+.is-sat { color: var(--ap-sat) !important; }
+.is-sun { color: var(--ap-sun) !important; }
+
+.aps-badge { display: inline-flex; align-items: center; height: 26px; padding: 0 11px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; white-space: nowrap; }
+.aps-badge.ok   { background: var(--ap-ok-bg);  color: var(--ap-ok); }
+.aps-badge.few  { background: var(--ap-few-bg); color: var(--ap-few); }
+.aps-badge.full { background: var(--ap-full-bg); color: var(--ap-body); }
+.aps-badge.open { background: #fff; color: var(--ap-body); box-shadow: inset 0 0 0 1px var(--ap-line-strong); }
+
+/* 折りたたみ：.is-extra は展開前は非表示 */
+.apl:not(.is-expanded) .is-extra { display: none; }
+.apl-more { padding: 12px 16px 16px; border-top: 1px solid var(--ap-line); }
+.apl-more button { width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--ap-line-strong); border-radius: 12px; background: #fff; color: var(--ap-ink);
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.apl-more button:hover { background: var(--ap-soft); }
+.apl-more svg { transition: transform .2s; }
+.apl.is-expanded .apl-more svg { transform: rotate(180deg); }
+
+.aps-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px 24px; text-align: center;
+  border: 1px dashed var(--ap-line-strong); border-radius: var(--ap-radius); background: #fff; }
+.aps-empty-ic { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 999px; background: var(--ap-soft); }
+.aps-empty p { margin: 0; }
+.aps-empty .t { font-size: 16px; font-weight: 700; }
+.aps-empty .s { font-size: 13px; color: var(--ap-body); }
+.aps-note { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border: 1px dashed var(--ap-line-strong);
+  border-radius: 16px; font-size: 13px; color: var(--ap-body); }
+
+/* フォーカス可視 */
+.aps a:focus-visible, .aps button:focus-visible { outline: 3px solid var(--ap-primary); outline-offset: 2px; border-radius: 12px; }
+.aps .apr:focus-visible { outline-offset: -3px; border-radius: 0; }
+
+/* ---------- スマホ（〜640px） ---------- */
+@media (max-width: 640px) {
+  .aps { padding: 40px 16px 48px; }
+  .aps-head { margin-bottom: 18px; }
+
+  .apf { grid-template-columns: 1fr; }
+  .apf-date { grid-template-areas: "day mon pill" "day wd pill"; grid-template-columns: auto 1fr auto;
+    align-items: center; column-gap: 12px; row-gap: 4px; padding: 20px 20px 0; background: none; border: 0; }
+  .apf-pill { margin: 0; align-self: start; }
+  .apf-mon { font-size: 13px; align-self: end; }
+  .apf-wd { font-size: 14px; align-self: start; }
+  .apf-day { font-size: 60px; line-height: .9; }
+  .apf-main { padding: 16px 20px 20px; gap: 16px; }
+  .apf-title { font-size: 18px; }
+  .apf-meta { flex-direction: column; gap: 8px; font-size: 14px; }
+  .apf-cap { flex-basis: 100%; padding: 14px; border-radius: 14px; background: var(--ap-soft); }
+  .apf-actions { width: 100%; }
+  .apf-actions .aps-cta { width: 100%; }
+
+  .apl-head { padding: 16px 18px 12px; }
+  .apl-month { padding: 10px 18px 7px; font-size: 13px; }
+  .apr { grid-template-columns: 40px auto minmax(0, 1fr) 18px; grid-template-areas: "d t t g" "d m b g";
+    column-gap: 10px; row-gap: 6px; min-height: 72px; padding: 10px 14px 10px 18px; }
+  .apr-day { font-size: 26px; }
+  .apr-wd { font-size: 11px; margin-top: 4px; }
+  .apr-t { font-size: 14px; }
+  .apr-d { margin-right: 4px; }
+  .apr-b { justify-self: start; }
+  .apr-m .apr-ic, .apr-m .apr-sep, .apr-m .apr-loc { display: none; } /* スマホは時刻のみ（会場はタイトルに含まれる想定） */
+  .apr-m.show-loc .apr-sep, .apr-m.show-loc .apr-loc { display: inline; }
+  .aps-badge { height: 22px; padding: 0 9px; font-size: 11px; }
+  .apr-g .lbl { display: none; }          /* 「参加登録」文字を隠し矢印のみ */
+  .apr.is-full .apr-g { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aps * { transition: none !important; }
+}
+</style>
+
+<!-- 本番用 JS（描画ロジック＋Supabase取得） -->
+<script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY, SIGNUP_BASE }}>
+(function () {
+  var SIGNUP = SIGNUP_BASE;
+  var LIMIT = 5;          // 「次の練習」以外で最初に見せる行数
+  var FEW = 3;            // 残りこの数以下で「残りわずか」
+  var WD = ['日','月','火','水','木','金','土'];
+  var MON_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  var MON_LONG = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+
+  // Lucide icons (ISC) — inline SVG
+  function icon(body, size) {
+    size = size || 16;
+    return '<svg aria-hidden="true" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + body + '</svg>';
+  }
+  var I = {
+    calendar: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    pin: '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    userPlus: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/>',
+    chevRight: '<path d="m9 18 6-6-6-6"/>',
+    chevDown: '<path d="m6 9 6 6 6-6"/>',
+    arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>'
+  };
+  var MUTE = ' style="color:#A08F78"';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function hm(t) { return String(t || '').slice(0, 5); } // "14:00:00" → "14:00"
+  function startOfToday() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+
+  function normalize(e, today) {
+    var p = String(e.date).split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    var w = d.getDay();
+    var max = (e.max_participants === null || e.max_participants === undefined || e.max_participants === '') ? null : Number(e.max_participants);
+    var n = Number(e.participant_count) || 0;
+    var rem = max == null ? null : Math.max(0, max - n);
+    var st = max == null ? 'open' : rem === 0 ? 'full' : rem <= FEW ? 'few' : 'ok';
+    var title = String(e.title || '練習').replace(/\s*[（(][^）)]*日[）)]\s*$/, ''); // 末尾の「（10月24日）」を除去
+    var loc = e.location || '';
+    var time = hm(e.start_time) + (e.end_time ? '–' + hm(e.end_time) : '');
+    return {
+      id: e.id, d: d, w: w, n: n, max: max, rem: rem, st: st, title: title, loc: loc, time: time,
+      locInTitle: !!loc && title.indexOf(loc) !== -1,
+      days: Math.round((d - today) / 86400000),
+      href: SIGNUP + encodeURIComponent(e.id),
+      wdCls: w === 6 ? ' is-sat' : w === 0 ? ' is-sun' : '',
+      md: (d.getMonth() + 1) + '/' + d.getDate(),
+      badge: st === 'full' ? '満席' : st === 'open' ? '参加 ' + n + '名' : '残り' + rem
+    };
+  }
+
+  function featured(x, nextOpen) {
+    var cd = x.days <= 0 ? '今日' : x.days === 1 ? '明日' : 'あと' + x.days + '日';
+    var cap;
+    if (x.max == null) {
+      cap = '<div class="apf-cap"><div class="apf-cap-row"><span' + MUTE + '>' + icon(I.users) +
+        '<span style="color:var(--ap-body)">現在 <b class="apf-cap-num">' + x.n + '</b>名が参加予定</span></span>' +
+        '<span class="apf-cap-state">定員なし</span></div></div>';
+    } else {
+      var pct = Math.min(100, Math.round(x.n / x.max * 100));
+      var stTxt = x.st === 'full' ? '満席' : x.st === 'few' ? '残りわずか・' + x.rem + '枠' : '残り' + x.rem + '枠';
+      var stCol = x.st === 'ok' ? 'var(--ap-ok)' : x.st === 'few' ? 'var(--ap-few)' : 'var(--ap-body)';
+      cap = '<div class="apf-cap"><div class="apf-cap-row"><span><span' + MUTE + '>' + icon(I.users) + '</span>参加 <b class="apf-cap-num">' + x.n + '</b> / ' + x.max + '名</span>' +
+        '<span class="apf-cap-state" style="color:' + stCol + '">' + stTxt + '</span></div>' +
+        '<div class="apf-bar" role="img" aria-label="定員' + x.max + '名中' + x.n + '名参加"><span style="width:' + pct + '%' + (x.st === 'full' ? ';background:#A08F78' : '') + '"></span></div></div>';
+    }
+    var actions = x.st === 'full'
+      ? '<span class="aps-cta" aria-disabled="true">満席のため受付終了</span>' +
+        (nextOpen ? '<a class="aps-sublink" href="' + nextOpen.href + '">次に空きがある日：' + nextOpen.md + '（' + WD[nextOpen.w] + '）' + icon(I.arrowRight, 18) + '</a>' : '')
+      : '<a class="aps-cta" href="' + x.href + '">' + icon(I.userPlus, 20) + 'この日にゲスト参加</a>';
+
+    return '<article class="apf" aria-label="次の練習">' +
+      '<div class="apf-date">' +
+        '<span class="apf-pill"><span class="aps-en">NEXT</span>' + cd + '</span>' +
+        '<span class="apf-mon">' + MON_EN[x.d.getMonth()] + ' ' + x.d.getFullYear() + '</span>' +
+        '<span class="apf-day">' + x.d.getDate() + '</span>' +
+        '<span class="apf-wd' + x.wdCls + '">' + WD[x.w] + '曜日</span>' +
+      '</div>' +
+      '<div class="apf-main">' +
+        '<h3 class="apf-title">' + esc(x.title) + '</h3>' +
+        '<ul class="apf-meta">' +
+          '<li><span' + MUTE + '>' + icon(I.clock, 18) + '</span><span class="apf-time">' + esc(x.time) + '</span></li>' +
+          (x.loc ? '<li><span' + MUTE + '>' + icon(I.pin, 18) + '</span>' + esc(x.loc) + '</li>' : '') +
+        '</ul>' +
+        '<div class="apf-foot">' + cap + '<div class="apf-actions">' + actions + '</div></div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function row(x, extra) {
+    var cls = 'apr' + (x.st === 'full' ? ' is-full' : '');
+    var label = (x.d.getMonth() + 1) + '月' + x.d.getDate() + '日（' + WD[x.w] + '）' + x.time + ' ' + x.title + '、' + x.badge;
+    var inner =
+      '<span class="apr-d"><span class="apr-day">' + x.d.getDate() + '</span><span class="apr-wd' + (x.st === 'full' ? '' : x.wdCls) + '">' + WD[x.w] + '</span></span>' +
+      '<span class="apr-t">' + esc(x.title) + '</span>' +
+      '<span class="apr-m' + (x.locInTitle ? '' : ' show-loc') + '"><span class="apr-ic"' + MUTE + '>' + icon(I.clock, 14) + '</span><span class="apr-time">' + esc(x.time) + '</span>' +
+        (x.loc ? '<span class="apr-sep" aria-hidden="true">·</span><span class="apr-loc">' + esc(x.loc) + '</span>' : '') + '</span>' +
+      '<span class="apr-b"><span class="aps-badge ' + x.st + '">' + x.badge + '</span></span>';
+    var li = '<li' + (extra ? ' class="is-extra"' : '') + '>';
+    if (x.st === 'full') {
+      return li + '<div class="' + cls + '" aria-label="' + esc(label) + '">' + inner + '<span class="apr-g">受付終了</span></div></li>';
+    }
+    return li + '<a class="' + cls + '" href="' + x.href + '" aria-label="' + esc(label + '。ゲスト参加登録へ') + '">' + inner +
+      '<span class="apr-g"><span class="lbl">参加登録</span>' + icon(I.chevRight, 18) + '</span></a></li>';
+  }
+
+  function list(rest) {
+    var html = '', lastM = -1, open = false;
+    rest.forEach(function (x, i) {
+      var extra = i >= LIMIT;
+      var m = x.d.getFullYear() * 12 + x.d.getMonth();
+      if (m !== lastM) {
+        if (open) html += '</ul>';
+        // 月見出しは、その月の最初の行と同じ表示状態に
+        html += '<h4 class="apl-month' + (extra ? ' is-extra' : '') + '">' + (x.d.getMonth() + 1) + '月<span class="aps-en">' + MON_LONG[x.d.getMonth()] + '</span></h4><ul>';
+        lastM = m; open = true;
+      }
+      html += row(x, extra);
+    });
+    if (open) html += '</ul>';
+    var hidden = rest.length - LIMIT;
+    var more = hidden > 0
+      ? '<div class="apl-more"><button type="button" aria-expanded="false" data-more="' + hidden + '"><span>さらに' + hidden + '件を表示</span>' +
+        '<span style="color:var(--ap-body)">' + icon(I.chevDown, 18) + '</span></button></div>'
+      : '';
+    return '<section class="apl" aria-label="この先の予定"><div class="apl-head"><h3>この先の予定</h3>' +
+      '<span class="apl-count"><b>' + rest.length + '</b> 件</span></div>' + html + more + '</section>';
+  }
+
+  function renderSchedule(root, events, opts) {
+    opts = opts || {};
+    var today = opts.today || startOfToday();
+    var items = (events || [])
+      .map(function (e) { return normalize(e, today); })
+      .filter(function (x) { return x.d >= today; })
+      .sort(function (a, b) { return a.d - b.d || a.time.localeCompare(b.time); });
+
+    if (!items.length) {
+      root.innerHTML = '<div class="aps-empty"><span class="aps-empty-ic"' + MUTE + '>' + icon(I.calendar, 24) + '</span>' +
+        '<p class="t">現在、公開中の練習予定はありません</p><p class="s">次回の予定は決まり次第ここに表示されます。</p></div>';
+      return;
+    }
+    var first = items[0];
+    var rest = items.slice(1);
+    var nextOpen = first.st === 'full' ? rest.filter(function (x) { return x.st !== 'full'; })[0] : null;
+
+    root.innerHTML = featured(first, nextOpen) + (rest.length
+      ? list(rest)
+      : '<div class="aps-note"><span' + MUTE + '>' + icon(I.calendar, 20) + '</span>次回以降の予定は、決まり次第ここに表示されます。</div>');
+
+    var btn = root.querySelector('[data-more]');
+    if (btn) btn.addEventListener('click', function () {
+      var sec = root.querySelector('.apl');
+      var on = sec.classList.toggle('is-expanded');
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      btn.firstChild.textContent = on ? '閉じる' : 'さらに' + btn.getAttribute('data-more') + '件を表示';
+    });
+  }
+
+  window.renderSchedule = renderSchedule;
+
+  // ---- Supabase の public_schedule を匿名で取得して描画 ----
+  // 返るのは安全な項目だけ（日付・タイトル・時間・場所・定員・参加人数）。
+  var root = document.getElementById('aps-root');
+  if (!root) return;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) { renderSchedule(root, []); return; }
+  fetch(SUPABASE_URL + '/rest/v1/rpc/public_schedule', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: 'Bearer ' + SUPABASE_ANON_KEY
+    },
+    body: '{}'
+  })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (events) { renderSchedule(root, Array.isArray(events) ? events : []); })
+    .catch(function () { renderSchedule(root, []); });
+})();
+</script>
