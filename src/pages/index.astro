@@ -20,9 +20,22 @@ const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL ?? "";
 const SUPABASE_ANON_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY ?? "";
 const CONNECT_URL = import.meta.env.PUBLIC_CONNECT_URL ?? "https://connect.akipickles.com";
 
-const placeName = "安芸府中生涯学習センター くすのきプラザ";
-const placeAddress = "〒735-0006 広島県安芸郡府中町本町1丁目10-15";
-const placeAccess = "Googleマップ等でご確認ください。";
+const places = [
+  {
+    short: "くすのきプラザ",
+    name: "安芸府中生涯学習センター くすのきプラザ",
+    address: "〒735-0006 広島県安芸郡府中町本町1丁目10-15",
+    mapLink: "https://maps.app.goo.gl/EUg4mxvDaS1jHqP5A",
+    mapQuery: "安芸府中生涯学習センターくすのきプラザ+広島県安芸郡府中町本町1丁目10-15",
+  },
+  {
+    short: "安芸区スポーツセンター",
+    name: "安芸区スポーツセンター",
+    address: "〒739-0323 広島県広島市安芸区中野東2丁目3-1",
+    mapLink: "https://maps.app.goo.gl/7xH2RpHn6EerKbJT7",
+    mapQuery: "安芸区スポーツセンター+広島県広島市安芸区中野東2丁目3-1",
+  },
+];
 
 const igPosts = [
   { caption: "第1回体験会の様子🏓 たくさんの方にご参加いただきました！初めてのピックルボール、みなさん笑顔で楽しんでくださいました😊", permalink: "https://www.instagram.com/p/DajrapRkzTc/", image: "/trial-vol1-2.png" },
@@ -128,6 +141,8 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
     </div>
   </nav>
 </header>
+<!-- メニューの背景オーバーレイ（モバイル） -->
+<div id="menu-overlay"></div>
 
 <!-- ファーストビュー -->
 <section id="top" style="position: relative; min-height: 92vh; display: flex; align-items: center; overflow: hidden; padding: 110px 20px 70px;">
@@ -360,25 +375,42 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       <span style="font-family: Jost, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.3em; color: #E0604A;">PLACE</span>
       <h2 style="margin: 0; font-size: 27px; font-weight: 900; color: #33291F;">活動場所</h2>
     </div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: stretch;">
-      <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 16px; border: 1px solid rgba(160, 143, 120, 0.16);">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">{placeName}</h3>
-        </div>
-        <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{placeAddress}</p>
-        <a href="https://maps.app.goo.gl/EUg4mxvDaS1jHqP5A" target="_blank" rel="noopener" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #E0604A; text-decoration: none;">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7 M9 7h8v8"></path></svg>
-          Google マップで開く
-        </a>
+    <!-- 左上のスライド切替（セグメント）。スワイプ／タップで中身だけ切り替わる -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div id="place-tabs" role="tablist">
+        <span id="place-tab-indicator"></span>
+        {places.map((p, i) => (
+          <button type="button" class={`place-tab${i === 0 ? ' active' : ''}`} data-i={i} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{p.short}</button>
+        ))}
       </div>
-      <div style="border-radius: 14px; overflow: hidden; min-height: 220px; border: 1px solid rgba(160, 143, 120, 0.2);">
-        <iframe
-          src="https://maps.google.com/maps?q=安芸府中生涯学習センターくすのきプラザ+広島県安芸郡府中町本町1丁目10-15&output=embed&z=16&hl=ja"
-          width="100%" height="100%" style="border: none; display: block; min-height: 220px;"
-          loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
-          title="くすのきプラザ 地図">
-        </iframe>
+      <div id="place-viewport">
+        <div id="place-track">
+          {places.map((p) => (
+            <div class="place-slide">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: stretch; padding: 2px;">
+                <div style="background: #FFFFFF; border-radius: 14px; padding: 30px 28px; display: flex; flex-direction: column; gap: 16px; border: 1px solid rgba(160, 143, 120, 0.16);">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E0604A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #33291F;">{p.name}</h3>
+                  </div>
+                  <p style="margin: 0; font-size: 14px; line-height: 1.9; color: #6B5F4E;">{p.address}</p>
+                  <a href={p.mapLink} target="_blank" rel="noopener" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #E0604A; text-decoration: none;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7 M9 7h8v8"></path></svg>
+                    Google マップで開く
+                  </a>
+                </div>
+                <div style="border-radius: 14px; overflow: hidden; min-height: 220px; border: 1px solid rgba(160, 143, 120, 0.2);">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${p.mapQuery}&output=embed&z=16&hl=ja`}
+                    width="100%" height="100%" style="border: none; display: block; min-height: 220px;"
+                    loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+                    title={`${p.short} 地図`}>
+                  </iframe>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </div>
@@ -465,37 +497,43 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
   const mobileMenu = document.getElementById('mobile-menu');
   const menuIcon = document.getElementById('menu-icon');
   const desktopNav = document.getElementById('desktop-nav');
+  const menuOverlay = document.getElementById('menu-overlay');
 
   const OPEN_PATH = "M6 6l12 12 M6 18L18 6";
   const CLOSE_PATH = "M4 7h16 M4 12h16 M4 17h16";
+
+  // メニューの開閉（オーバーレイ表示＋背景スクロール固定）
+  function setMenu(open) {
+    if (!mobileMenu) return;
+    mobileMenu.classList.toggle('open', open);
+    menuOverlay?.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    if (menuIcon) menuIcon.setAttribute('d', open ? OPEN_PATH : CLOSE_PATH);
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
 
   function updateLayout() {
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
     if (menuBtn) menuBtn.style.display = isMobile ? 'flex' : 'none';
     if (desktopNav) desktopNav.style.display = isMobile ? 'none' : 'flex';
-    if (!isMobile && mobileMenu) {
-      mobileMenu.classList.remove('open');
-      if (menuIcon) menuIcon.setAttribute('d', CLOSE_PATH);
-    }
+    // PC幅になったら必ず閉じる
+    if (!isMobile) setMenu(false);
   }
 
   updateLayout();
   window.matchMedia('(max-width: 767px)').addEventListener('change', updateLayout);
 
-  if (menuBtn && mobileMenu && menuIcon) {
-    menuBtn.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.toggle('open');
-      menuIcon.setAttribute('d', isOpen ? OPEN_PATH : CLOSE_PATH);
-    });
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => setMenu(!mobileMenu.classList.contains('open')));
   }
-
-  // モバイルメニューのリンクをクリックしたら閉じる
+  // オーバーレイをタップで閉じる
+  menuOverlay?.addEventListener('click', () => setMenu(false));
+  // メニュー内のリンクをタップしたら閉じる
   document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.remove('open');
-      if (menuIcon) menuIcon.setAttribute('d', CLOSE_PATH);
-    });
+    link.addEventListener('click', () => setMenu(false));
   });
+  // Esc キーで閉じる
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 
   // IG スライダー（モバイルのみ）
   (function() {
@@ -534,6 +572,56 @@ const leafPath = "M12 2 L13.3 6.2 L17 4.6 L15.4 8.2 L20 9.2 L16.4 11.6 L18.8 15.
       if (!isOpen) item.classList.add('is-open');
     });
   });
+
+  // 活動場所：左上のスライド切替＋スワイプで、枠はそのまま中身だけ切り替える
+  (() => {
+    const tabsEl = document.getElementById('place-tabs');
+    const indicator = document.getElementById('place-tab-indicator');
+    const track = document.getElementById('place-track');
+    const viewport = document.getElementById('place-viewport');
+    if (!tabsEl || !indicator || !track || !viewport) return;
+    const tabs = Array.from(tabsEl.querySelectorAll('.place-tab'));
+    const total = tabs.length;
+    if (total === 0) return;
+    let idx = 0;
+
+    function moveIndicator() {
+      const btn = tabs[idx];
+      indicator.style.width = btn.offsetWidth + 'px';
+      indicator.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+    }
+    function select(i) {
+      idx = Math.max(0, Math.min(total - 1, i));
+      track.style.transform = 'translateX(' + (-idx * 100) + '%)';
+      tabs.forEach((t, n) => {
+        t.classList.toggle('active', n === idx);
+        t.setAttribute('aria-selected', n === idx ? 'true' : 'false');
+      });
+      moveIndicator();
+    }
+
+    tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+
+    // スワイプで切り替え（モバイル）
+    let startX = 0, startY = 0, swiping = false;
+    viewport.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY; swiping = true;
+    }, { passive: true });
+    viewport.addEventListener('touchend', (e) => {
+      if (!swiping) return;
+      swiping = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      // 横方向のはっきりしたスワイプのみ（縦スクロールを邪魔しない）
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+        select(idx + (dx < 0 ? 1 : -1));
+      }
+    }, { passive: true });
+
+    // 初期位置・リサイズ時にインジケーターを合わせる
+    requestAnimationFrame(moveIndicator);
+    window.addEventListener('resize', moveIndicator);
+  })();
 </script>
 
 </body>
